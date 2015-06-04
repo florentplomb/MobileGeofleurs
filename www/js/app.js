@@ -21,6 +21,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 })
 
+       .run(function (AuthService, $rootScope, $state) {
+
+
+            $rootScope.$on('$stateChangeStart', function (event, toState) {
+
+
+                if (!AuthService.currentUserId && toState.name != 'login' && toState.name != 'register') {
+
+                    event.preventDefault();
+                    $state.go('login');
+                };
+
+
+
+
+            });
+        })
+
 .config(function($stateProvider, $urlRouterProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -92,6 +110,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+          $urlRouterProvider.otherwise(function ($injector) {
+                $injector.get('$state').go('tab.dash');
+            });
 
 });

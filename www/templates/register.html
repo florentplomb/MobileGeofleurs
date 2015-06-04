@@ -1,17 +1,20 @@
 <ion-view view-title="Register" name="register-view">
-  <ion-content class="padding">
+  <ion-content >
   <form name="registerForm">
-    <div id="registerForm" class="list">
-
-        <p class="info_register">{{animation.error}}</p>
-        <input type="email" ng-model="user.email" placeholder="Email" required="required" >
-
-         <input type="text" ng-model="user.pseudo"  required="required" placeholder="pseudo" >
-
-
-        <input type="password" ng-model="user.password"  required="required" placeholder="Mot de pass">
-
-    </div>
+      <div class="lis">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Email</span>
+              <input type="text" placeholder="john@suhr.com" ng-model="user.email">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Pseudo</span>
+              <input type="text" placeholder="suhr98" ng-model="pseudo">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Password</span>
+              <input type="password" placeholder="Password" ng-model="user.password">
+          </label>
+      </div>
 
     <button id="buttonLogin" ng-click="register()" class="button buttonLogin button-block button-assertive">
         Inscription

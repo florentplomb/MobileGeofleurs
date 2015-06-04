@@ -8,7 +8,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope,AuthService, $ionicHistory, LoginService,$ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+.controller('RegisterCtrl', function($scope,AuthService, $ionicHistory,$rootScope , $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 
   $scope.$on('$ionicView.beforeEnter', function() {
     // Initialize (or re-initialize) the user object.
@@ -52,7 +52,7 @@ angular.module('starter.controllers', ['starter.services'])
       });
 
       // Go to the issue creation tab.
-      $state.go('tab.dash');
+      $state.go('login');
 
     }).error(function() {
 
@@ -66,8 +66,17 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('LoginCtrl', function($scope,LoginService, $ionicHistory, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
-  $scope.data = {};
+.controller('LoginCtrl', function($scope,AuthService, $ionicHistory,$rootScope,$ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+   $scope.$on('$ionicView.beforeEnter', function() {
+    // Initialize (or re-initialize) the user object.
+    // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+    $scope.user = {};
+
+     $scope.user.email = "flo@flo.com";
+    $scope.user.password = "1234";
+  });
+
+
 
   $scope.goRegister = function() {
 
@@ -86,16 +95,20 @@ angular.module('starter.controllers', ['starter.services'])
       delay: 750
     });
 
+
     // Make the request to retrieve or create the user.
     $http({
       method: 'POST',
-      url: apiUrl + '/users/logister',
-      data: $scope.user
+      url: apiUrl + '/users/login',
+      data: {
+        "email": $scope.user.email,
+        "password": $scope.user.password
+      }
     }).success(function(user) {
 
-      // If successful, give the user to the authentication service.
-      AuthService.setUser(user);
-
+    $rootScope.user = user;
+    AuthService.setSalt(user);
+    AuthService.setUser(user);
       // Hide the loading message.
       $ionicLoading.hide();
 
@@ -119,6 +132,17 @@ angular.module('starter.controllers', ['starter.services'])
 
   }
 })
+
+     .controller('LogoutCtrl', function ( AuthService, $scope, $state) {
+
+            $scope.logOut = function () {
+                AuthService.unsetUser();
+                console.log('logout');
+                $state.go('login');
+            };
+
+
+        })
 
 
 .controller('ChatsCtrl', function($scope, Chats) {

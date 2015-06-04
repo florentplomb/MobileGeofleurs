@@ -1,5 +1,9 @@
   <ion-view view-title="Dashboard">
+     <ion-nav-buttons side="secondary">
+    <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
+  </ion-nav-buttons>
   <ion-content class="padding">
+
     <div class="list card">
       <div class="item item-divider">Recent Updates</div>
       <div class="item item-body" ng-click="go()">
