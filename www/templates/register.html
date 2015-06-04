@@ -1,0 +1,21 @@
+<ion-view view-title="Register" name="register-view">
+  <ion-content class="padding">
+  <form name="registerForm">
+    <div id="registerForm" class="list">
+
+        <p class="info_register">{{animation.error}}</p>
+        <input type="email" ng-model="user.email" placeholder="Email" required="required" >
+
+         <input type="text" ng-model="user.pseudo"  required="required" placeholder="pseudo" >
+
+
+        <input type="password" ng-model="user.password"  required="required" placeholder="Mot de pass">
+
+    </div>
+
+    <button id="buttonLogin" ng-click="register()" class="button buttonLogin button-block button-assertive">
+        Inscription
+    </button>
+</form>
+  </ion-content>
+</ion-view>
