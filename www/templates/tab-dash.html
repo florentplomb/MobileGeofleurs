@@ -2,7 +2,9 @@
      <ion-nav-buttons side="secondary">
     <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
   </ion-nav-buttons>
-  <ion-content class="padding">
+    <leaflet  event-broadcast="events" defaults="mapDefaults"   layers="layers"  center="map.center"   height='100%'>
+  </leaflet>
+<!--   <ion-content class="padding">
 
     <div class="list card">
       <div class="item item-divider">Recent Updates</div>
@@ -28,5 +30,5 @@
         </div>
       </div>
     </div>
-  </ion-content>
+  </ion-content> -->
 </ion-view>

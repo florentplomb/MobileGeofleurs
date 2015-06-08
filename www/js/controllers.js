@@ -8,7 +8,7 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('RegisterCtrl', function($scope,AuthService, $ionicHistory,$rootScope , $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+.controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 
   $scope.$on('$ionicView.beforeEnter', function() {
     // Initialize (or re-initialize) the user object.
@@ -25,7 +25,7 @@ angular.module('starter.controllers', ['starter.services'])
       template: 'Regsiter in...',
       delay: 750
     });
-    console.log($scope.user)
+
 
     // Make the request to retrieve or create the user.
     $http({
@@ -37,6 +37,8 @@ angular.module('starter.controllers', ['starter.services'])
         "password": $scope.user.password
       }
     }).success(function(user) {
+
+
 
       // If successful, give the user to the authentication service.
       AuthService.setUser(user);
@@ -54,7 +56,9 @@ angular.module('starter.controllers', ['starter.services'])
       // Go to the issue creation tab.
       $state.go('login');
 
-    }).error(function() {
+    }).error(function(user) {
+
+      console.log("eroor");
 
       // If an error occurs, hide the loading message and show an error message.
       $ionicLoading.hide();
@@ -66,14 +70,14 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
-.controller('LoginCtrl', function($scope,AuthService, $ionicHistory,$rootScope,$ionicPopup, $state, apiUrl, $ionicLoading, $http) {
-   $scope.$on('$ionicView.beforeEnter', function() {
+.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+  $scope.$on('$ionicView.beforeEnter', function() {
     // Initialize (or re-initialize) the user object.
     // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
     $scope.user = {};
 
-     $scope.user.email = "flo@flo.com";
-    $scope.user.password = "1234";
+    //  $scope.user.email = "flo@flo.com";
+    // $scope.user.password = "1234";
   });
 
 
@@ -106,9 +110,12 @@ angular.module('starter.controllers', ['starter.services'])
       }
     }).success(function(user) {
 
-    $rootScope.user = user;
-    AuthService.setSalt(user);
-    AuthService.setUser(user);
+
+
+
+      $rootScope.user = user;
+      AuthService.setSalt(user);
+      AuthService.setUser(user);
       // Hide the loading message.
       $ionicLoading.hide();
 
@@ -124,25 +131,46 @@ angular.module('starter.controllers', ['starter.services'])
 
     }).error(function() {
 
-      // If an error occurs, hide the loading message and show an error message.
+      console.log("erroe");
+
       $ionicLoading.hide();
-      $scope.error = 'Could not log in.';
+
+      $scope.user.password = {};
+
+      $scope.errorLogin = {};
+      $scope.errorLogin = "Email ou mot de passe incorrect";
+       console.log ($scope.errorLogin);
+
+
+    //   showAlert = function() {
+
+    //     var alertPopup = $ionicPopup.alert({
+    //       title: '',
+    //       template: 'It might taste good'
+    //     });
+    //     alertPopup.then(function(res) {
+    //       console.log('Thank you for not eating my delicious ice cream cone');
+    //     });
+    //   };
+    // showAlert();
+
+
     });
 
 
   }
 })
 
-     .controller('LogoutCtrl', function ( AuthService, $scope, $state) {
+.controller('LogoutCtrl', function(AuthService, $scope, $state) {
 
-            $scope.logOut = function () {
-                AuthService.unsetUser();
-                console.log('logout');
-                $state.go('login');
-            };
+  $scope.logOut = function() {
+    AuthService.unsetUser();
+    console.log('logout');
+    $state.go('login');
+  };
 
 
-        })
+})
 
 
 .controller('ChatsCtrl', function($scope, Chats) {

@@ -20,21 +20,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   });
 })
-
        .run(function (AuthService, $rootScope, $state) {
-
-
             $rootScope.$on('$stateChangeStart', function (event, toState) {
-
-
                 if (!AuthService.currentUserId && toState.name != 'login' && toState.name != 'register') {
-
-                    event.preventDefault();
+                   event.preventDefault();
                     $state.go('login');
                 };
-
-
-
 
             });
         })
