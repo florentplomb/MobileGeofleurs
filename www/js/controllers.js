@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services'])
+angular.module('starter.controllers', ['starter.services', 'leaflet-directive'])
 
 .constant('apiUrl', 'http://localhost:8100/api-proxy')
 
@@ -7,6 +7,23 @@ angular.module('starter.controllers', ['starter.services'])
 
 
 })
+
+.controller('MapCtrl', function($scope){
+
+     $scope.center = {
+
+    lat: 46.841759385352,
+    lng: 6.64475440979004,
+    zoom: 10
+
+    }
+
+    var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
+    mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
+    $scope.defaults = {
+        tileLayer: mapboxTileLayer
+    };
+  })
 
 .controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 
@@ -70,14 +87,15 @@ angular.module('starter.controllers', ['starter.services'])
 
 })
 
+
 .controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
   $scope.$on('$ionicView.beforeEnter', function() {
     // Initialize (or re-initialize) the user object.
     // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
     $scope.user = {};
 
-    //  $scope.user.email = "flo@flo.com";
-    // $scope.user.password = "1234";
+     $scope.user.email = "flo@flo.com";
+    $scope.user.password = "1234";
   });
 
 

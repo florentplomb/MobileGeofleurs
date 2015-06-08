@@ -1,1 +1,14 @@
-/* Empty. Add your own CSS if you like */
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+#map {
+
+	height: 100%;
+
+}/* Empty. Add your own CSS if you like */
+
+[ng-app]{
+    height:100%;
+}

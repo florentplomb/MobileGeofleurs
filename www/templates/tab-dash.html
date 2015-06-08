@@ -2,33 +2,12 @@
      <ion-nav-buttons side="secondary">
     <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
   </ion-nav-buttons>
-    <leaflet  event-broadcast="events" defaults="mapDefaults"   layers="layers"  center="map.center"   height='100%'>
-  </leaflet>
-<!--   <ion-content class="padding">
+  <ion-content scroll='false'>
+  <div ng-controller="MapCtrl" id="map">
 
-    <div class="list card">
-      <div class="item item-divider">Recent Updates</div>
-      <div class="item item-body" ng-click="go()">
-        <div>
-          There is a fire in <b>sector 3</b>
-        </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Health</div>
-      <div class="item item-body">
-        <div>
-          You ate an apple today!
-        </div>
-      </div>
-    </div>
-    <div class="list card">
-      <div class="item item-divider">Upcoming</div>
-      <div class="item item-body">
-        <div>
-          You have <b>29</b> meetings on your calendar tomorrow.
-        </div>
-      </div>
-    </div>
-  </ion-content> -->
+<leaflet defaults="defaults" center="center" height="100%" ></leaflet>
+
+  </div>
+
+  </ion-content>
 </ion-view>
