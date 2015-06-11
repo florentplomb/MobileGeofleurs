@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services', 'leaflet-directive', 'geolocation'])
+angular.module('starter.controllers', ['starter.services','ionic', 'leaflet-directive', 'geolocation'])
 
 //.constant('apiUrl', 'http://localhost:8100/api-proxy')
 .constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
@@ -8,321 +8,358 @@ angular.module('starter.controllers', ['starter.services', 'leaflet-directive', 
 
 })
 
-.controller('MapCtrl', function($scope, geolocation, $ionicPopup, $log) {
+.controller('MapCtrl', function($scope, geolocation, $ionicPopup, $log,$timeout) {
 
 
-  $scope.markers = [];
-  var myPosition = {
-    iconUrl: "img/redicon.png",
-    iconSize: [34, 39],
-    iconAnchor: [14, 40]
-  };
-  $scope.center = {
-    lat: 46.841759385352,
-    lng: 6.64475440979004,
-    zoom: 10
-  }
+  console.log("alix");
+        $scope.location = function() {
+          console.log("JE me geo");
+
+          $scope.geolocOn = false;
+          geolocation.getLocation().then(function(data) {
+
+            $scope.center.lat = data.coords.latitude;
+            $scope.center.lng = data.coords.longitude;
+            $scope.center.zoom = 17;
 
 
-  $scope.location = function() {
-    $scope.geolocOn = false;
-    geolocation.getLocation().then(function(data) {
-      $scope.center.lat = data.coords.latitude;
-      $scope.center.lng = data.coords.longitude;
-      $scope.center.zoom = 17;
+            var pos = {
+              lat: data.coords.latitude,
+              lng: data.coords.longitude,
+              icon: myPosition
+            };
 
+            $scope.markers.push(pos);
+            $scope.geolocOn = true;
+          }, function(error) {
+            pop();
+            $log.error("Could not get location: " + error);
+          });
 
-      var pos = {
-        lat: data.coords.latitude,
-        lng: data.coords.longitude,
-        icon: myPosition
-      };
+        };
 
-      $scope.markers.push(pos);
-      $scope.geolocOn = true;
-    }, function(error) {
-      pop();
-      $log.error("Could not get location: " + error);
-    });
+        function pop() {
+          var alertPopup = $ionicPopup.alert({
+            title: 'Impossible to get position active your geoloc or try later'
 
-  };
+          });
+          alertPopup.then(function(res) {
 
-  function pop() {
-    var alertPopup = $ionicPopup.alert({
-      title: 'Impossible to get position active your geoloc or try later'
+          });
+        };
+ $scope.location();
 
-    });
-    alertPopup.then(function(res) {
+      $scope.$on('$ionicView.beforeEnter', function() {
+        // Initialize (or re-initialize) the user object.
+        // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
 
-    });
-  };
+        $timeout(function() {
+          $scope.$broadcast('invalidateSize');
 
-
-  $scope.location();
-
-  var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
-  mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
-  $scope.defaults = {
-    tileLayer: mapboxTileLayer
-  };
-})
+        });
 
 
 
-.controller('PhotoCtrl', function($scope, $state, $ionicPopup, CameraService,apiUrl,$http) {
+      })
 
 
-  $scope.getPhoto = function() {
-
-  CameraService.getPicture({
-      quality: 100,
-      targetWidth: 400,
-      targetHeight: 600,
-      saveToPhotoAlbum: false,
-      correctOrientation: true,
-      encodingType: navigator.camera.EncodingType.JPEG,
-      destinationType: navigator.camera.DestinationType.DATA_URL
-    }).then(function(imageData) {
-
-
-
-      $http({
-        method: "POST",
-        url: apiUrl + "/images",
-        headers: {
-          "Content-type": "application/json"
-        },
-        data: {
-          "imageB64": imageData
+        $scope.markers = [];
+        var myPosition = {
+          iconUrl: "img/redicon.png",
+          iconSize: [34, 39],
+          iconAnchor: [14, 40]
+        };
+        $scope.center = {
+          lat: 46.841759385352,
+          lng: 6.64475440979004,
+          zoom: 10
         }
-      }).success(function(data) {
 
+        // geolocation.getLocation().then(function(data) {
+        //   $scope.center.lat = data.coords.latitude;
+        //   $scope.center.lng = data.coords.longitude;
+        //   $scope.center.zoom = 17;
 
-         alert("sucess");
 
+        //   var pos = {
+        //     lat: data.coords.latitude,
+        //     lng: data.coords.longitude,
+        //     icon: myPosition
+        //   };
 
-        //  $scope.newIssue.photo = data.url;
+        //   $scope.markers.push(pos);
+        //   $scope.geolocOn = true;
+        // }, function(error) {
+        //   pop();
+        //   $log.error("Could not get location: " + error);
+        // });
 
-      });
-    }, function(err) {
-      alert("erorr" + err);
 
-      $scope.error = err;
-    });
 
-  };
 
-})
 
-.factory('CameraService', ['$q', function($q) {
+        var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
+        mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
+        $scope.defaults = {
+          tileLayer: mapboxTileLayer
+        };
+      })
 
-  return {
-    getPicture: function(options) {
 
-        console.log("hola");
-      var q = $q.defer();
-      navigator.camera.getPicture(function(result) {
-        // Do any magic you need
-        q.resolve(result);
-      }, function(err) {
-        q.reject(err);
-      }, options);
 
-      return q.promise;
-    }
-  };
+      .controller('PhotoCtrl', function($scope, $state, $ionicPopup, CameraService, apiUrl, $http) {
 
-}])
 
+        $scope.getPhoto = function() {
 
-.controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+          CameraService.getPicture({
+            quality: 100,
+            targetWidth: 400,
+            targetHeight: 600,
+            saveToPhotoAlbum: false,
+            correctOrientation: true,
+            encodingType: navigator.camera.EncodingType.JPEG,
+            destinationType: navigator.camera.DestinationType.DATA_URL
+          }).then(function(imageData) {
 
-  $scope.$on('$ionicView.beforeEnter', function() {
-    // Initialize (or re-initialize) the user object.
-    // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
-    $scope.user = {};
-  });
-  $scope.register = function() {
 
-    // Forget the previous error (if any).
-    delete $scope.error;
 
-    // Show a loading message if the request takes too long.
-    $ionicLoading.show({
-      template: 'Regsiter in...',
-      delay: 750
-    });
+            $http({
+              method: "POST",
+              url: apiUrl + "/images",
+              headers: {
+                "Content-type": "application/json"
+              },
+              data: {
+                "imageB64": imageData
+              }
+            }).success(function(data) {
 
 
-    // Make the request to retrieve or create the user.
-    $http({
-      method: 'POST',
-      url: apiUrl + '/users',
-      data: {
-        "email": $scope.user.email,
-        "pseudo": $scope.user.pseudo,
-        "password": $scope.user.password
-      }
-    }).success(function(user) {
+              alert("sucess");
 
 
+              //  $scope.newIssue.photo = data.url;
 
-      // If successful, give the user to the authentication service.
-      AuthService.setUser(user);
+            });
+          }, function(err) {
+            alert("erorr" + err);
 
-      // Hide the loading message.
-      $ionicLoading.hide();
+            $scope.error = err;
+          });
 
-      // Set the next view as the root of the history.
-      // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
-      $ionicHistory.nextViewOptions({
-        disableBack: true,
-        historyRoot: true
-      });
+        };
 
-      // Go to the issue creation tab.
-      $state.go('login');
+      })
 
-    }).error(function(user) {
+      .factory('CameraService', ['$q', function($q) {
 
-      console.log("eroor");
+        return {
+          getPicture: function(options) {
 
-      // If an error occurs, hide the loading message and show an error message.
-      $ionicLoading.hide();
-      $scope.error = 'Could not log in.';
-    });
+            console.log("hola");
+            var q = $q.defer();
+            navigator.camera.getPicture(function(result) {
+              // Do any magic you need
+              q.resolve(result);
+            }, function(err) {
+              q.reject(err);
+            }, options);
 
+            return q.promise;
+          }
+        };
 
-  }
+      }])
 
-})
 
+      .controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 
-.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
-  $scope.$on('$ionicView.beforeEnter', function() {
-    // Initialize (or re-initialize) the user object.
-    // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
-    $scope.user = {};
+        $scope.$on('$ionicView.beforeEnter', function() {
+          // Initialize (or re-initialize) the user object.
+          // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+          $scope.user = {};
+        });
+        $scope.register = function() {
 
-    $scope.user.email = "flo@flo.com";
-    $scope.user.password = "1234";
+          // Forget the previous error (if any).
+          delete $scope.error;
 
-  });
+          // Show a loading message if the request takes too long.
+          $ionicLoading.show({
+            template: 'Regsiter in...',
+            delay: 750
+          });
 
 
+          // Make the request to retrieve or create the user.
+          $http({
+            method: 'POST',
+            url: apiUrl + '/users',
+            data: {
+              "email": $scope.user.email,
+              "pseudo": $scope.user.pseudo,
+              "password": $scope.user.password
+            }
+          }).success(function(user) {
 
-  $scope.goRegister = function() {
 
-    $state.go('register')
 
-  }
+            // If successful, give the user to the authentication service.
+            AuthService.setUser(user);
 
-  $scope.login = function() {
+            // Hide the loading message.
+            $ionicLoading.hide();
 
-    // Forget the previous error (if any).
-    delete $scope.error;
+            // Set the next view as the root of the history.
+            // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+            $ionicHistory.nextViewOptions({
+              disableBack: true,
+              historyRoot: true
+            });
 
-    // Show a loading message if the request takes too long.
-    $ionicLoading.show({
-      template: 'Logging in...',
-      delay: 750
-    });
+            // Go to the issue creation tab.
+            $state.go('login');
 
+          }).error(function(user) {
 
-    // Make the request to retrieve or create the user.
-    $http({
-      method: 'POST',
-      url: apiUrl + '/users/login',
-      data: {
-        "email": $scope.user.email,
-        "password": $scope.user.password
-      }
-    }).success(function(user) {
+            console.log("eroor");
 
+            // If an error occurs, hide the loading message and show an error message.
+            $ionicLoading.hide();
+            $scope.error = 'Could not log in.';
+          });
 
 
-      $rootScope.user = user;
-      AuthService.setSalt(user);
-      AuthService.setUser(user);
-      // Hide the loading message.
-      $ionicLoading.hide();
+        }
 
-      // Set the next view as the root of the history.
-      // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
-      $ionicHistory.nextViewOptions({
-        disableBack: true,
-        historyRoot: true
-      });
+      })
 
-      // Go to the issue creation tab.
-      $state.go('tab.dash');
 
-    }).error(function() {
+      .controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+        $scope.$on('$ionicView.beforeEnter', function() {
+          // Initialize (or re-initialize) the user object.
+          // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+          $scope.user = {};
 
-      console.log("erroe");
+          $scope.user.email = "flo@flo.com";
+          $scope.user.password = "1234";
 
-      $ionicLoading.hide();
+        });
 
-      $scope.user.password = {};
 
-      $scope.errorLogin = {};
-      $scope.errorLogin = "Email ou mot de passe incorrect";
-      console.log($scope.errorLogin);
 
+        $scope.goRegister = function() {
 
-      //   showAlert = function() {
+          $state.go('register')
 
-      //     var alertPopup = $ionicPopup.alert({
-      //       title: '',
-      //       template: 'It might taste good'
-      //     });
-      //     alertPopup.then(function(res) {
-      //       console.log('Thank you for not eating my delicious ice cream cone');
-      //     });
-      //   };
-      // showAlert();
+        }
 
+        $scope.login = function() {
 
-    });
+          // Forget the previous error (if any).
+          delete $scope.error;
 
+          // Show a loading message if the request takes too long.
+          $ionicLoading.show({
+            template: 'Logging in...',
+            delay: 750
+          });
 
-  }
-})
 
-.controller('LogoutCtrl', function(AuthService, $scope, $state) {
+          // Make the request to retrieve or create the user.
+          $http({
+            method: 'POST',
+            url: apiUrl + '/users/login',
+            data: {
+              "email": $scope.user.email,
+              "password": $scope.user.password
+            }
+          }).success(function(user) {
 
-  $scope.logOut = function() {
-    AuthService.unsetUser();
-    console.log('logout');
-    $state.go('login');
-  };
 
 
-})
+            $rootScope.user = user;
+            AuthService.setSalt(user);
+            AuthService.setUser(user);
+            // Hide the loading message.
+            $ionicLoading.hide();
 
+            // Set the next view as the root of the history.
+            // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+            $ionicHistory.nextViewOptions({
+              disableBack: true,
+              historyRoot: true
+            });
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+            // Go to the issue creation tab.
+            $state.go('tab.dash');
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  }
-})
+          }).error(function() {
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+            console.log("erroe");
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-})
+            $ionicLoading.hide();
 
+            $scope.user.password = {};
+
+            $scope.errorLogin = {};
+            $scope.errorLogin = "Email ou mot de passe incorrect";
+            console.log($scope.errorLogin);
+
+
+            //   showAlert = function() {
+
+            //     var alertPopup = $ionicPopup.alert({
+            //       title: '',
+            //       template: 'It might taste good'
+            //     });
+            //     alertPopup.then(function(res) {
+            //       console.log('Thank you for not eating my delicious ice cream cone');
+            //     });
+            //   };
+            // showAlert();
+
+
+          });
+
+
+        }
+      })
+
+      .controller('LogoutCtrl', function(AuthService, $scope, $state) {
+
+        $scope.logOut = function() {
+          AuthService.unsetUser();
+          console.log('logout');
+          $state.go('login');
+        };
+
+
+      })
+
+
+      .controller('ChatsCtrl', function($scope, Chats) {
+        // With the new view caching in Ionic, Controllers are only called
+        // when they are recreated or on app start, instead of every page change.
+        // To listen for when this page is active (for example, to refresh data),
+        // listen for the $ionicView.enter event:
+        //
+        //$scope.$on('$ionicView.enter', function(e) {
+        //});
+
+        $scope.chats = Chats.all();
+        $scope.remove = function(chat) {
+          Chats.remove(chat);
+        }
+      })
+
+      .controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
+        $scope.chat = Chats.get($stateParams.chatId);
+      })
+
+      .controller('AccountCtrl', function($scope) {
+        $scope.settings = {
+          enableFriends: true
+        };
+      })

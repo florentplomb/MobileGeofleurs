@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "angularjs-geolocation": "~0.1.1",
-    "jr-crop": "~1.0.0"
+    "jr-crop": "~1.0.0",
+    "ngGeolocation": "~0.0.7"
   }
 }
