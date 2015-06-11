@@ -1,10 +1,10 @@
 {
   "name": "myApp",
-  "app_id": "",
+  "app_id": "43ebcd8a",
   "proxies": [
     {
       "path": "/api-proxy",
-      "proxyUrl": "http://localhost:9000/api"
+      "proxyUrl": "http://geofleurs.herokuapp.com/api"
     }
   ]
 }

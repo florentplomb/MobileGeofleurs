@@ -5,9 +5,23 @@
   <ion-content scroll='false'>
   <div ng-controller="MapCtrl" id="map">
 
-<leaflet defaults="defaults" center="center" height="100%" ></leaflet>
+<leaflet defaults="defaults" center="center" markers="markers" height="100%" ></leaflet>
 
+
+
+    <div ng-click="location()" id="buttonPos">
+    <i style="font-size:1.2em;"ng-show="geolocOn" class="fa fa-street-view">
+    </i>
+    <i ng-hide="geolocOn" class="fa fa-spinner fa-pulse">
+    </i>
   </div>
 
+    <div  ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">
+    <button id="b1map"  class="button button-full button-calm">
+      Add an issue  <i class="ion-plus-circled"> </i>
+    </button>
+  </div>
+
+  </div>
   </ion-content>
 </ion-view>
