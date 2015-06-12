@@ -11,9 +11,9 @@ angular.module('starter.controllers', ['starter.services','ionic', 'leaflet-dire
 .controller('MapCtrl', function($scope, geolocation, $ionicPopup, $log,$timeout) {
 
 
-  console.log("alix");
+
         $scope.location = function() {
-          console.log("JE me geo");
+
 
           $scope.geolocOn = false;
           geolocation.getLocation().then(function(data) {
@@ -280,6 +280,7 @@ angular.module('starter.controllers', ['starter.services','ionic', 'leaflet-dire
 
 
             $rootScope.user = user;
+            console.log(user);
             AuthService.setSalt(user);
             AuthService.setUser(user);
             // Hide the loading message.

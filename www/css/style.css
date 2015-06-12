@@ -16,9 +16,9 @@ html, body {
 #buttonPos {
 
 
-    padding-top: 1em;
+    padding-top: 0.5em;
     position: absolute;
-    top: 10%;
+    top: 1px;
     left: 0.4em;
     width: 0%;
     font-size: 2em;
@@ -26,6 +26,10 @@ html, body {
 
 }
 
+.leaflet-control {
+  visibility: hidden;
+
+}
 .leaflet-container .leaflet-control-attribution{
   visibility: hidden;
 }

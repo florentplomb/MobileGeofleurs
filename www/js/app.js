@@ -22,10 +22,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 })
        .run(function (AuthService, $rootScope, $state) {
             $rootScope.$on('$stateChangeStart', function (event, toState) {
-                if (!AuthService.currentUserId && toState.name != 'login' && toState.name != 'register') {
-                   event.preventDefault();
-                    $state.go('login');
-                };
+           // If the user is not logged in and is trying to access another state than "login"...
+        if (!AuthService.currentUserId && toState.name !== 'login') {
+            console.log('Activating login');
+
+// ... then cancel the transition and go to the "login" state instead.
+            event.preventDefault();
+            $state.go('login');
+        }
+
+
 
             });
         })
@@ -37,21 +43,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
     $ionicConfigProvider.tabs.position('bottom');
-  $stateProvider
+
+    $stateProvider
 
 
 
-    .state('login', {
-      url: '/login',
-      controller:'LoginCtrl',
-      templateUrl: 'templates/login.html'
-  })
 
-          .state('register', {
-      url: '/register',
-      controller:'RegisterCtrl',
-      templateUrl: 'templates/register.html'
-      })
 
   // setup an abstract state for the tabs directive
     .state('tab', {
@@ -99,11 +96,27 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
         controller: 'AccountCtrl'
       }
     }
-  });
+  })
+
+                    .state('login', {
+      url: '/login',
+      controller:'LoginCtrl',
+      templateUrl: 'templates/login.html'
+  })
+
+
+          .state('register', {
+      url: '/register',
+      controller:'RegisterCtrl',
+      templateUrl: 'templates/register.html'
+      })
+
 
   // if none of the above states are matched, use this as the fallback
           $urlRouterProvider.otherwise(function ($injector) {
                 $injector.get('$state').go('tab.dash');
             });
+
+
 
 });
