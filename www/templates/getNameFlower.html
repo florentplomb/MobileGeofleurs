@@ -1,0 +1,43 @@
+<form>
+
+    <div ng-controller="MapCtrl">
+
+        <div>
+            <angucomplete-alt   placeholder="Indiquez le nom commun" pause="200" selected-object="selectNomC" local-data="espNames" search-fields="NOMC" title-field="NOMC" minlength="3" match-class="highlight" />
+        </div>
+
+
+
+<input type="radio" id="rb1" name="rb" value=""  checked>
+<label for="rb1" class="space">Commmun</label><br>
+<input type="radio" id="rb2" name="rb"value="" >
+<label class="space" for="rb2">Latin</label><br>
+
+
+
+
+              <div>
+            <p>Nom commmun: {{selectNomC.originalObject.NOMC}} </p>
+        </div>
+        <div>
+             <p>Nom latin : {{selectNomC.originalObject.NOML}}  </p>
+        </div>
+    </div>
+
+</form>
+<!-- <form class="form-inline">
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputEmail3">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword3">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Remember me
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Sign in</button>
+</form> -->

@@ -2,6 +2,7 @@
      <ion-nav-buttons side="secondary">
     <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
   </ion-nav-buttons>
+
   <ion-content scroll='false'>
   <div ng-controller="MapCtrl" id="map">
 
@@ -9,14 +10,25 @@
 
 
 
-    <div ng-click="location()" id="buttonPos">
-    <i style="font-size:1.2em;"ng-show="geolocOn" class="fa fa-street-view">
+    <div  class="locate">
+    <i   style="font-size:1.2em;" ng-show="geoloc1" class="fa fa-spinner fa-spin">
     </i>
-    <i ng-hide="geolocOn" class="fa fa-spinner fa-pulse">
+
+    <i  class="fa fa-map-marker" ng-show="geoloc2" ng-click="stopgeo()"style="font-size:1.4em; color:#fc8428;">
     </i>
+
+    <i  class="fa fa-map-marker" ng-show="geoloc3" ng-click="startgeo()"style="font-size:1.4em;">
+    </i>
+
+   <!--  <i  class="fa fa-map-marker" ng-hide="geolocOn" ng-click="startgeo()"style="font-size:1.2em;"  >
+    </i>
+ -->
   </div>
 
-    <div  ng-controller="PhotoCtrl" id="newFleurs" ng-show="geolocOn"ng-click="getPhoto()" class="buttonMap">
+
+
+
+    <div  ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">
     <button id="b1map"  class="button button-full button-calm">
       Ajouter une nouvelle fleur <i class="ion-plus-circled"> </i>
     </button>
@@ -24,4 +36,5 @@
 
   </div>
   </ion-content>
+
 </ion-view>
