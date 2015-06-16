@@ -4,7 +4,7 @@
   "proxies": [
     {
       "path": "/api-proxy",
-      "proxyUrl": "http://localhost:9000/api"
+      "proxyUrl": "http://geofleurs.herokuapp.com/api"
     }
   ]
 }

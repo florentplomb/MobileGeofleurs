@@ -3,18 +3,19 @@
     <div ng-controller="MapCtrl">
 
         <div>
-            <angucomplete-alt   placeholder="Indiquez le nom commun" pause="200" selected-object="selectNomC" local-data="espNames" search-fields="NOMC" title-field="NOMC" minlength="3" match-class="highlight" />
+            <angucomplete-alt   placeholder="Indiquez le nom commun" pause="200" selected-object="selectNomC" local-data="espNames" search-fields="{{searchEsp}}" title-field="{{searchEsp}},ISFS" minlength="3" match-class="highlight" />
         </div>
 
 
+<h3> Recherche par nom : </h3>
 
-<input type="radio" id="rb1" name="rb" value=""  checked>
+<input type="radio"  ng-model="searchEsp" id="rb1" name="rb" value="NOMC" checked>
 <label for="rb1" class="space">Commmun</label><br>
-<input type="radio" id="rb2" name="rb"value="" >
+<input type="radio" ng-model="searchEsp" id="rb2" name="rb"value="NOML">
 <label class="space" for="rb2">Latin</label><br>
 
 
-
+<h3> Informations complètes : </h3>
 
               <div>
             <p>Nom commmun: {{selectNomC.originalObject.NOMC}} </p>

@@ -1,7 +1,7 @@
 angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-directive', 'ngCordova', 'angucomplete-alt'])
 
 .constant('apiUrl', 'http://localhost:8100/api-proxy')
-    //.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 .controller('DashCtrl', function($scope, $state, $ionicPopup) {
 
@@ -10,26 +10,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 .controller('MapCtrl', function($scope, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
 
-
-    $scope.selectNomL = {};
-
-    $scope.selectNomL = "kikou";
+    $scope.searchEsp = "NOMC";
 
 
-    $scope.selectNomL.orginaltitle = "hoho";
+
     $scope.$watch(function() {
-        return $scope.selectNomC;
+        return $scope.searchEsp;
     }, function(newValue, oldValue) {
-        if ($scope.selectNomC) {
-
-
-
-            $scope.selectNomL = "kikou";
-
-
-
-
-        };
+        console.log($scope.searchEsp)
     });
 
 
@@ -44,7 +32,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
     $scope.geoloc3 = false;
 
     EspService.getEspName(function(err, data) {
-        if (err) $scope.error = error;
+        if (err) $scope.error = err;
         $scope.espNames = data;
     })
 
@@ -183,13 +171,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 
 
-.controller('PhotoCtrl', function($scope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicPopup) {
+.controller('PhotoCtrl', function($scope, $state, $ionicPopup, CameraService, apiUrl, $http,$ionicLoading) {
 
     $scope.showPopup = function() {
 
         $scope.data = {}
-
-     document.getElementById("ex2").focus();
 
         // An elaborate, custom popup
         var myPopup = $ionicPopup.show({
@@ -223,6 +209,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
             templateUrl: "templates/getNameFlower.html",
             title: "Nom de l'espèce observée ",
             scope: $scope,
+            cssClass: "poop",
             buttons: [{
                 text: 'Cancel'
             }, {
@@ -246,6 +233,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
     $scope.getPhoto = function() {
 
+        $ionicLoading.show({
+        template: 'Logging in...',
+        delay: 750
+      });
+
         $http({
             method: "POST",
             url: apiUrl + "/images",
@@ -256,6 +248,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                 "imageB64": "adsasdada"
             }
         }).success(function(idImg) {
+
+            $ionicLoading.hide();
 
             $scope.showPopup();
 

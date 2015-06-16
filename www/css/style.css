@@ -22,18 +22,30 @@ h2 {
     position: relative;
 }
 */
+.poop .popup {
+width: 95%;
+height: 95%;
+
+}
+/*.popup {
+  width: 1000px;
+  height: 350px;
+}
 
 .popup-head {
 
     background-color: #e3e5e1;
 
 
+}*/
+.highlight {
+    color: #ff0000;
 }
 
 
-.popup-title {
+/*.popup-title {
    color : #000;
-}
+}*/
 
 
 input[type=radio], input[type=checkbox] {
