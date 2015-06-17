@@ -22,11 +22,16 @@ h2 {
     position: relative;
 }
 */
-.poop .popup {
+.popNameSelect .popup {
 width: 95%;
 height: 95%;
 
 }
+
+.popNameSelect .popup-head {
+
+    background-color: #e3e5e1;
+    }
 /*.popup {
   width: 1000px;
   height: 350px;
@@ -42,10 +47,22 @@ height: 95%;
     color: #ff0000;
 }
 
+.validate{
+  background-color: blue;
+}
 
+.unvalidate{
+  background-color: red;
+}
 /*.popup-title {
    color : #000;
 }*/
+
+.angucomplete-description {
+    font-family: 1px;
+    font-style: italic;
+    color:#8e8e8e;
+}
 
 
 input[type=radio], input[type=checkbox] {

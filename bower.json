@@ -15,6 +15,7 @@
     "ngCordova": "~0.1.17-alpha",
     "ngDialog": "~0.4.0",
     "angucomplete-alt": "~1.0.0",
-    "allmighty-autocomplete": "*"
+    "allmighty-autocomplete": "*",
+    "underscore": "~1.8.3"
   }
 }

@@ -5,7 +5,12 @@
     {
       "path": "/api-proxy",
       "proxyUrl": "http://geofleurs.herokuapp.com/api"
+    },
+     {
+      "path": "/local-proxy",
+      "proxyUrl": "http://localhost:9000/api"
     }
+
   ]
 }
 
