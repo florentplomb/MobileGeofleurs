@@ -67,10 +67,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     }
   })
 
-    .state('tab.issueDetails', {
+    .state('tab.flowerDetails', {
     // We use a parameterized route for this state.
     // That way we'll know which issue to display the details of.
-    url: '/issueDetails/:issueId',
+    url: '/flowerDetails/:flowerId',
 
     views:{
       'tab-dash':{

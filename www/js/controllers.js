@@ -6,12 +6,12 @@ underscore.factory('_', function() {
 angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-directive', 'ngCordova', 'angucomplete-alt'])
 
 //.constant('apiUrl', 'http://localhost:8100/api-proxy')
-.constant('apiUrl', 'http://localhost:8100/local-proxy')
-    //.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+//.constant('apiUrl', 'http://localhost:8100/local-proxy')
+    .constant('apiUrl', 'http://geoflowers.herokuapp.com/api')
 
 
 
-.controller('MapCtrl', function($scope,$state, apiUrl,$rootScope, FleursService,$cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
+.controller('MapCtrl', function($scope,$state, apiUrl,$rootScope, flowersService,$cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
 
 
     $scope.searchEsp = "NOMC";
@@ -30,34 +30,35 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 
 
-        $scope.goDetail = function(issueId) {
+        $scope.goDetail = function(flowerId) {
+            console.log(flowerId);
 
-        $state.go("tab.issueDetails", {
-            issueId: issueId
+        $state.go("tab.flowerDetails", {
+            flowerId: flowerId
         });
     };
 
 
 
-             FleursService.getFleurs(function(err, fleurs) {
+             flowersService.getflowers(function(err, flowers) {
         if (err) $scope.error = err;
 
-           angular.forEach(fleurs, function(fleur) {
+           angular.forEach(flowers, function(flower) {
 
-            console.log(fleur.geometry.coordinates[0])
 
-                $scope.urlImgID = apiUrl+"/images/"+fleur.properties.image;
+
+                $scope.urlImgID = apiUrl+"/images/"+flower.properties.image;
 
                     $scope.markers.push({
 
-                        lng: parseFloat(fleur.geometry.coordinates[0]),
-                        lat: parseFloat(fleur.geometry.coordinates[1]),
-                        id: fleur.id,
+                        lng: parseFloat(flower.geometry.coordinates[0]),
+                        lat: parseFloat(flower.geometry.coordinates[1]),
+                        id: flower._id,
                       //  message : "hello",
-                        message: '<div ng-click="goDetail(fleur.id)"><p>{{}}</p><img src="{{urlImgID}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                        message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
                         getMessageScope: function() {
                             var scope = $scope.$new();
-                            scope.fleur = fleur;
+                            scope.flower = flower;
                             return scope;
                         }
 
@@ -92,70 +93,70 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
     $scope.geoloc2 = false;
     $scope.geoloc3 = false;
 
-    // leafletData.getMap().then(function(map) {
-    //     if (map._controlCorners.bottomleft.childElementCount === 0) {
+    leafletData.getMap().then(function(map) {
+        if (map._controlCorners.bottomleft.childElementCount === 0) {
 
-    //         var lc = L.control.locate({
-    //             position: 'topleft',
-    //             follow: true, // follow the user's location
-    //             setView: true,
-    //             keepCurrentZoomLevel: false,
-    //             locateOptions: {
-    //                 enableHighAccuracy: true,
-    //                 maximumAge: 3000,
-    //                 timeout: 10000
-    //             }
-    //         }).addTo(map);
-    //         lc.start();
-    //         console.log("geoloc");
+            var lc = L.control.locate({
+                position: 'topleft',
+                follow: true, // follow the user's location
+                setView: true,
+                keepCurrentZoomLevel: false,
+                locateOptions: {
+                    enableHighAccuracy: true,
+                    maximumAge: 3000,
+                    timeout: 10000
+                }
+            }).addTo(map);
+            lc.start();
+            console.log("geoloc");
 
-    //     }
+        }
 
-    //     $scope.stopgeo = function() {
-    //         $scope.geoloc2 = false;
-    //         $scope.geoloc3 = true;
-    //         lc.stop();
-    //     }
-    //     $scope.startgeo = function() {
+        $scope.stopgeo = function() {
+            $scope.geoloc2 = false;
+            $scope.geoloc3 = true;
+            lc.stop();
+        }
+        $scope.startgeo = function() {
 
-    //         $scope.geoloc2 = true;
-    //         $scope.geoloc3 = false;
-    //         lc.start();
+            $scope.geoloc2 = true;
+            $scope.geoloc3 = false;
+            lc.start();
 
-    //     }
+        }
 
-    //     map.on('startfollowing', function() {
-    //         $scope.geolocOn = true;
+        map.on('startfollowing', function() {
+            $scope.geolocOn = true;
 
-    //     }).on('stopfollowing', function() {
-    //         $scope.geolocOn = false;
-
-
-    //     });
-
-    //     map.on('locationfound', function(e) {
-
-    //         $scope.position = e.latlng
-    //         $scope.geoloc2 = true;
-    //         $scope.geoloc1 = false;
-    //         $scope.geoloc3 = false;
-
-    //     });
-
-    //     map.on('locationerror', function(e) {
-    //         $scope.geoloc1 = true;
-    //         $scope.geoloc2 = false;
-    //         $scope.geoloc3 = false;
-
-    //         if (!alert("Géolocalisation impossible: Activer le GPS , préférer les endroits dégagés")) {
-    //             window.location.reload();
-    //         }
+        }).on('stopfollowing', function() {
+            $scope.geolocOn = false;
 
 
+        });
 
-    //     })
+        map.on('locationfound', function(e) {
 
-    // });
+            $scope.position = e.latlng
+            $scope.geoloc2 = true;
+            $scope.geoloc1 = false;
+            $scope.geoloc3 = false;
+
+        });
+
+        map.on('locationerror', function(e) {
+            $scope.geoloc1 = true;
+            $scope.geoloc2 = false;
+            $scope.geoloc3 = false;
+
+            if (!alert("Géolocalisation impossible: Activer le GPS , préférer les endroits dégagés")) {
+                window.location.reload();
+            }
+
+
+
+        })
+
+    });
 
     function pop() {
         var alertPopup = $ionicPopup.alert({
@@ -179,7 +180,23 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 })
 
-.controller('PhotoCtrl', function($scope,FleursService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
+.controller('DetailCtrl', function($scope,apiUrl, $stateParams, flowersService, $state) {
+
+
+            var flowerId = $stateParams.flowerId;
+
+            $scope.urlImg = apiUrl+"/images/"
+            flowersService.getByIdflower(function(err, flower) {
+        if (err) $scope.error = err;
+
+        $scope.flower = flower;
+
+    },flowerId);
+
+
+})
+
+.controller('PhotoCtrl', function($scope,flowersService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
 
 
 
@@ -259,12 +276,12 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
         $http({
             method: "POST",
-            url: apiUrl + "/fleurs",
+            url: apiUrl + "/flowers",
             headers: {
                 "Content-type": "application/json"
             },
             data: {
-                "fleur" : $scope.newFlower
+                "flower" : $scope.newFlower
             }
         }).success(function(data) {
 
@@ -475,7 +492,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 })
 
 
-.factory("FleursService", function($http, apiUrl) {
+.factory("flowersService", function($http, apiUrl) {
 
 
     var config = {
@@ -484,8 +501,15 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         }
     };
     return {
-        getFleurs: function(callback) {
+        getflowers: function(callback) {
             $http.get(apiUrl + "/fleurs", config).success(function(data) {
+                callback(null, data);
+            }).error(function(error) {
+                callback(error);
+            });
+        },
+         getByIdflower: function(callback,flowerId) {
+            $http.get(apiUrl + "/fleurs/"+flowerId, config).success(function(data) {
                 callback(null, data);
             }).error(function(error) {
                 callback(error);
@@ -496,160 +520,160 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 })
 
 
-// .controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+.controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 
-//     $scope.$on('$ionicView.beforeEnter', function() {
-//         // Initialize (or re-initialize) the user object.
-//         // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
-//         $scope.user = {};
-//     });
-//     $scope.register = function() {
+    $scope.$on('$ionicView.beforeEnter', function() {
+        // Initialize (or re-initialize) the user object.
+        // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+        $scope.user = {};
+    });
+    $scope.register = function() {
 
-//         // Forget the previous error (if any).
-//         delete $scope.error;
+        // Forget the previous error (if any).
+        delete $scope.error;
 
-//         // Show a loading message if the request takes too long.
-//         $ionicLoading.show({
-//             template: 'Regsiter in...',
-//             delay: 750
-//         });
-
-
-//         // Make the request to retrieve or create the user.
-//         $http({
-//             method: 'POST',
-//             url: apiUrl + '/users',
-//             data: {
-//                 "email": $scope.user.email,
-//                 "pseudo": $scope.user.pseudo,
-//                 "password": $scope.user.password
-//             }
-//         }).success(function(user) {
+        // Show a loading message if the request takes too long.
+        $ionicLoading.show({
+            template: 'Regsiter in...',
+            delay: 750
+        });
 
 
-
-//             // If successful, give the user to the authentication service.
-//             AuthService.setUser(user);
-
-//             // Hide the loading message.
-//             $ionicLoading.hide();
-
-//             // Set the next view as the root of the history.
-//             // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
-//             $ionicHistory.nextViewOptions({
-//                 disableBack: true,
-//                 historyRoot: true
-//             });
-
-//             // Go to the issue creation tab.
-//             $state.go('login');
-
-//         }).error(function(user) {
-
-//             console.log("eroor");
-
-//             // If an error occurs, hide the loading message and show an error message.
-//             $ionicLoading.hide();
-//             $scope.error = 'Could not log in.';
-//         });
-
-
-//     }
-
-// })
-
-
-// .controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
-//     $scope.$on('$ionicView.beforeEnter', function() {
-//         // Initialize (or re-initialize) the user object.
-//         // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
-//         $scope.user = {};
-
-//         $scope.user.email = "flo@flo.com";
-//         $scope.user.password = "1234";
-
-//     });
+        // Make the request to retrieve or create the user.
+        $http({
+            method: 'POST',
+            url: apiUrl + '/users',
+            data: {
+                "email": $scope.user.email,
+                "pseudo": $scope.user.pseudo,
+                "password": $scope.user.password
+            }
+        }).success(function(user) {
 
 
 
-//     $scope.goRegister = function() {
+            // If successful, give the user to the authentication service.
+            AuthService.setUser(user);
 
-//         $state.go('register')
+            // Hide the loading message.
+            $ionicLoading.hide();
 
-//     }
+            // Set the next view as the root of the history.
+            // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                historyRoot: true
+            });
 
-//     $scope.login = function() {
+            // Go to the issue creation tab.
+            $state.go('login');
 
-//         // Forget the previous error (if any).
-//         delete $scope.error;
+        }).error(function(user) {
 
-//         // Show a loading message if the request takes too long.
-//         $ionicLoading.show({
-//             template: 'Logging in...',
-//             delay: 750
-//         });
+            console.log("eroor");
 
-
-//         // Make the request to retrieve or create the user.
-//         $http({
-//             method: 'POST',
-//             url: apiUrl + '/users/login',
-//             data: {
-//                 "email": $scope.user.email,
-//                 "password": $scope.user.password
-//             }
-//         }).success(function(user) {
+            // If an error occurs, hide the loading message and show an error message.
+            $ionicLoading.hide();
+            $scope.error = 'Could not log in.';
+        });
 
 
+    }
 
-//             $rootScope.user = user;
-//             console.log(user);
-//             AuthService.setSalt(user);
-//             AuthService.setUser(user);
-//             // Hide the loading message.
-//             $ionicLoading.hide();
-
-//             // Set the next view as the root of the history.
-//             // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
-//             $ionicHistory.nextViewOptions({
-//                 disableBack: true,
-//                 historyRoot: true
-//             });
-
-//             // Go to the issue creation tab.
-//             $state.go('tab.dash');
-
-//         }).error(function() {
-
-//             console.log("erroe");
-
-//             $ionicLoading.hide();
-
-//             $scope.user.password = {};
-
-//             $scope.errorLogin = {};
-//             $scope.errorLogin = "Email ou mot de passe incorrect";
-//             console.log($scope.errorLogin);
+})
 
 
-//             //   showAlert = function() {
+.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
+    $scope.$on('$ionicView.beforeEnter', function() {
+        // Initialize (or re-initialize) the user object.
+        // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
+        $scope.user = {};
 
-//             //     var alertPopup = $ionicPopup.alert({
-//             //       title: '',
-//             //       template: 'It might taste good'
-//             //     });
-//             //     alertPopup.then(function(res) {
-//             //       console.log('Thank you for not eating my delicious ice cream cone');
-//             //     });
-//             //   };
-//             // showAlert();
+        $scope.user.email = "flo@flo.com";
+        $scope.user.password = "1234";
 
-
-//         });
+    });
 
 
-//     }
-// })
+
+    $scope.goRegister = function() {
+
+        $state.go('register')
+
+    }
+
+    $scope.login = function() {
+
+        // Forget the previous error (if any).
+        delete $scope.error;
+
+        // Show a loading message if the request takes too long.
+        $ionicLoading.show({
+            template: 'Logging in...',
+            delay: 750
+        });
+
+
+        // Make the request to retrieve or create the user.
+        $http({
+            method: 'POST',
+            url: apiUrl + '/users/login',
+            data: {
+                "email": $scope.user.email,
+                "password": $scope.user.password
+            }
+        }).success(function(user) {
+
+
+
+            $rootScope.user = user;
+            console.log(user);
+            AuthService.setSalt(user);
+            AuthService.setUser(user);
+            // Hide the loading message.
+            $ionicLoading.hide();
+
+            // Set the next view as the root of the history.
+            // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+            $ionicHistory.nextViewOptions({
+                disableBack: true,
+                historyRoot: true
+            });
+
+            // Go to the issue creation tab.
+            $state.go('tab.dash');
+
+        }).error(function() {
+
+            console.log("erroe");
+
+            $ionicLoading.hide();
+
+            $scope.user.password = {};
+
+            $scope.errorLogin = {};
+            $scope.errorLogin = "Email ou mot de passe incorrect";
+            console.log($scope.errorLogin);
+
+
+            //   showAlert = function() {
+
+            //     var alertPopup = $ionicPopup.alert({
+            //       title: '',
+            //       template: 'It might taste good'
+            //     });
+            //     alertPopup.then(function(res) {
+            //       console.log('Thank you for not eating my delicious ice cream cone');
+            //     });
+            //   };
+            // showAlert();
+
+
+        });
+
+
+    }
+})
 
 .controller('LogoutCtrl', function(AuthService, $scope, $state) {
 

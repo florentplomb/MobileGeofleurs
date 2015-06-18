@@ -11,20 +11,22 @@
 
   </div>
 
-    <div  class="locate">
-    <i   style="font-size:1.2em;" ng-show="geoloc1" class="fa fa-spinner fa-spin">
+      <div class="locate"  ng-show="geoloc1">
+    <i    class="fa fa-spinner fa-spin" style="font-size:1.4em;">
     </i>
-
-    <i  class="fa fa-map-marker" ng-show="geoloc2" ng-click="stopgeo()"style="font-size:1.4em; color:#fc8428;">
+</div>
+    <div class="locate" ng-show="geoloc2" ng-click="stopgeo()">
+    <i  class="fa fa-map-marker" style="font-size:1.6em; color:#fc8428;">
     </i>
-
-    <i  class="fa fa-map-marker" ng-show="geoloc3" ng-click="startgeo()"style="font-size:1.4em;">
+     </div>
+<div class="locate" ng-show="geoloc3" ng-click="startgeo()">
+    <i  class="fa fa-map-marker" style="font-size:1.6em;">
     </i>
+  </div>
 
    <!--  <i  class="fa fa-map-marker" ng-hide="geolocOn" ng-click="startgeo()"style="font-size:1.2em;"  >
     </i>
- -->
-  </div>
+
 
 
     <div  ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">

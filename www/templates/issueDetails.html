@@ -1,15 +1,15 @@
-<ion-view view-title="Issue Details" >
+<ion-view view-title="Issue Details" ng-controller="DetailCtrl" >
 
   </ion-nav-buttons>
           <ion-content>
             <div class="list card">
                 <div class="item">
-                    <h2>{{}}</h2>
+                    <h2>{{flower.properties.espece.NOMC}}sda</h2>
                     <p class="state">{{}}</p>
                 </div>
                 <div class="item item-body">
 
-                    <img class="small-image" src="{{issue.imageUrl}}">
+                    <img class="small-image" src="{{urlImg+flower.properties.image}}">
                   <p class="titledescr">Description of the issue :</p>
                   <p class="descr">{{}}</p>
                   <p>

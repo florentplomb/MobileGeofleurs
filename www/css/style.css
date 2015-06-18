@@ -90,7 +90,7 @@ input[type=radio]:checked + label:before {
     background-color: #fff;
     margin-left: 1px;
     position: absolute;
-    padding: 0.3em 0.7em;
+    padding: 0.5em 1em;
     top: 10px;
     left: 0.4em;
     width: auto;
