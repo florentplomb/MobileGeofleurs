@@ -1,8 +1,8 @@
-<form name"espForm">
+<form name"espForm" ng-controller="PhotoCtrl">
 
-    <div ng-controller="MapCtrl">
+    <div>
 
-        <div>
+        <div >
             <angucomplete-alt template-url="template" id="ex1" input-changed="inputChanged" input-class="{{valideEsp}}" description-field="NOML" placeholder="Nom commun ou latin ( min. 3 lettres )" pause="200" selected-object="selectEsp" local-data="espNames" search-fields="NOMC,NOML" title-field="NOMC" minlength="3" match-class="highlight"  />
         </div>
         <p ng-show="invEsp" style="color : red ; font-size: 12px;">*Veuillez séléctioner une espèce présente de la liste</p>
@@ -10,23 +10,29 @@
 
 
 <h3> Informations complètes : </h3>
-
+<div id="Global">
+  <div id="gauche">
               <div>
-            <p>Nom commmun: {{selectNomC.originalObject.NOMC}} </p>
+            <p>Nom commmun: {{selectEsp.originalObject.NOMC}} </p>
         </div>
         <div>
-             <p>Nom latin : {{selectNomC.originalObject.NOML}}  </p>
+             <p>Nom latin : {{selectEsp.originalObject.NOML}}  </p>
+        </div>
+        <div>
+             <p>Commune de la saisie : {{newCommune[0].properties.NAME}}  </p>
         </div>
     </div>
-
-
-
-    <button class="button button-positive .popup-buttons" ng-click="publier(selectEsp)">Login</button>
-     <button class="button button-positive .popup-buttons" ng-click="">non</button>
+  </div>
+</div>
+<div ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
+  <p ng-hide="afficherImg">  Cacher ma photo </p>
+  <p ng-hide="!afficherImg"> Afficher ma photo </p>
+</div>
+<img ng-hide="afficherImg" src="{{UrlnewImg}}" width="100%" />
 
 </form>
 
-    <script type="text/ng-template" id="template">
+    <script type="text/ng-template" id="template" ng-controller="PhotoCtrl">
       <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
         <input autofocus id="{{id}}_value" name={{inputName}} ng-class="{'angucomplete-input-not-empty': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)"/>
         <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">

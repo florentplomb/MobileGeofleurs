@@ -1,14 +1,15 @@
-  <ion-view view-title="Dashboard">
+  <ion-view view-title="Dashboard" ng-controller="MapCtrl">
      <ion-nav-buttons side="secondary">
     <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
   </ion-nav-buttons>
 
-  <ion-content scroll='false'>
-  <div ng-controller="MapCtrl" id="map">
+  <ion-content  scroll='false'>
+  <div   id="map">
 
-<leaflet defaults="defaults" center="center" markers="markers" height="100%" ></leaflet>
+<leaflet   data-tap-disabled="true"  defaults="defaults"  markers="markers" center="center" maxbounds="maxbounds"  height="100%"></leaflet>
 
 
+  </div>
 
     <div  class="locate">
     <i   style="font-size:1.2em;" ng-show="geoloc1" class="fa fa-spinner fa-spin">
@@ -24,8 +25,6 @@
     </i>
  -->
   </div>
-
-
 
 
     <div  ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">

@@ -47,9 +47,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     $stateProvider
 
 
-
-
-
   // setup an abstract state for the tabs directive
     .state('tab', {
     url: "/tab",
@@ -61,42 +58,30 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('tab.dash', {
     url: '/dash',
-     cache: false,
+
     views: {
       'tab-dash': {
         templateUrl: 'templates/tab-dash.html',
-        controller: 'DashCtrl'
+
       }
     }
   })
 
-  .state('tab.chats', {
-      url: '/chats',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
-        }
-      }
-    })
+    .state('tab.issueDetails', {
+    // We use a parameterized route for this state.
+    // That way we'll know which issue to display the details of.
+    url: '/issueDetails/:issueId',
 
-  .state('tab.account', {
-    url: '/account',
-    views: {
-      'tab-account': {
-        templateUrl: 'templates/tab-account.html',
-        controller: 'AccountCtrl'
-      }
+    views:{
+      'tab-dash':{
+       templateUrl: 'templates/issueDetails.html',
+
+     }
+
     }
+      // Here we use the same "tab-issueList" view as the previous state.
+      // This means that the issue details template will be displayed in the same tab as the issue list.
+
   })
 
                     .state('login', {
