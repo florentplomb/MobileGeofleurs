@@ -5,11 +5,11 @@
         <div >
             <angucomplete-alt template-url="template" id="ex1" input-changed="inputChanged" input-class="{{valideEsp}}" description-field="NOML" placeholder="Nom commun ou latin ( min. 3 lettres )" pause="200" selected-object="selectEsp" local-data="espNames" search-fields="NOMC,NOML" title-field="NOMC" minlength="3" match-class="highlight"  />
         </div>
-        <p ng-show="invEsp" style="color : red ; font-size: 12px;">*Veuillez séléctioner une espèce présente de la liste</p>
+        <p ng-show="invEsp" style="color : red ; font-size: 12px; margin: 0px">*Veuillez séléctioner une espèce présente de la liste</p>
 
 
 
-<h3> Informations complètes : </h3>
+<h3> Espèce séléctionée : </h3>
 <div id="Global">
   <div id="gauche">
               <div>
@@ -25,16 +25,19 @@
   </div>
 </div>
 <div ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
-  <p ng-hide="afficherImg">  Cacher ma photo </p>
-  <p ng-hide="!afficherImg"> Afficher ma photo </p>
+  <p ng-hide="afficherImg"> Afficher ma photo  </p>
+  <p ng-hide="!afficherImg"> Cacher ma photo </p>
 </div>
-<img ng-hide="afficherImg" src="{{UrlnewImg}}" width="100%" />
+<img ng-hide="!afficherImg" src="{{UrlnewImg}}" width="100%" />
 
 </form>
 
     <script type="text/ng-template" id="template" ng-controller="PhotoCtrl">
       <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+        <label class="item item-input">
+    <i class="icon ion-search placeholder-icon"></i>
         <input autofocus id="{{id}}_value" name={{inputName}} ng-class="{'angucomplete-input-not-empty': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)"/>
+          </label>
         <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">
           <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
           <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>

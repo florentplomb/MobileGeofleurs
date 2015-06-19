@@ -6,21 +6,18 @@ underscore.factory('_', function() {
 angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-directive', 'ngCordova', 'angucomplete-alt'])
 
 //.constant('apiUrl', 'http://localhost:8100/api-proxy')
-//.constant('apiUrl', 'http://localhost:8100/local-proxy')
+.constant('apiUrl', 'http://localhost:8100/local-proxy')
 
- .constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
-
-
-
-.controller('MapCtrl', function($scope, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
+//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 
+
+.controller('MapCtrl', function($scope, $ionicLoading, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
+
+    $rootScope.markers = [];
     $scope.searchEsp = "NOMC";
     $scope.searchEspInv = "NOML";
     $scope.valideEsp = "";
-
-
-    $scope.markers = [];
 
 
     EspService.getEspName(function(err, data) {
@@ -28,7 +25,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         $scope.espNames = data;
 
     });
-
 
 
     $scope.goDetail = function(flowerId) {
@@ -39,37 +35,44 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         });
     };
 
+    $scope.displayFlowers = function() {
 
 
-    flowersService.getflowers(function(err, flowers) {
-        if (err) $scope.error = err;
-
-        angular.forEach(flowers, function(flower) {
-
-
-
-            $scope.urlImgID = apiUrl + "/images/" + flower.properties.image;
-
-            $scope.markers.push({
-
-                lng: parseFloat(flower.geometry.coordinates[0]),
-                lat: parseFloat(flower.geometry.coordinates[1]),
-                id: flower._id,
-                //  message : "hello",
-                message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
-                getMessageScope: function() {
-                    var scope = $scope.$new();
-                    scope.flower = flower;
-                    return scope;
-                }
-
-            });
-
-        })
+        $ionicLoading.show({
+            template: "Chargement des publications",
+            delay: 750
+        });
 
 
-    });
+        flowersService.getflowers(function(err, flowers) {
+            if (err) {
+                $ionicLoading.hide();
+                $scope.error = err;
+            }
 
+            angular.forEach(flowers, function(flower) {
+                $scope.urlImgID = apiUrl + "/images/" + flower.properties.image;
+                $scope.markers.push({
+
+                    lng: parseFloat(flower.geometry.coordinates[0]),
+                    lat: parseFloat(flower.geometry.coordinates[1]),
+                    id: flower._id,
+                    //  message : "hello",
+                    message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                    getMessageScope: function() {
+                        var scope = $scope.$new();
+                        scope.flower = flower;
+                        return scope;
+                    }
+
+                });
+
+            })
+            $ionicLoading.hide();
+        });
+    };
+
+    $scope.displayFlowers();
 
 
     $scope.center = {
@@ -99,7 +102,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
             var lc = L.control.locate({
                 position: 'topleft',
-                follow: true, // follow the user's location
+
                 setView: true,
                 keepCurrentZoomLevel: false,
                 locateOptions: {
@@ -169,8 +172,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         });
     };
 
-
-
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
     mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
     $scope.defaults = {
@@ -197,136 +198,196 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 })
 
-.controller('PhotoCtrl', function($scope, flowersService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
+.controller('PhotoCtrl', function($scope, $timeout, flowersService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
 
+    $timeout(function() {
+        $scope.$watch(function() {
+            return $scope.selectEsp;
+        }, function() {
 
-$scope.$watch(function() {
-    return $scope.selectEsp;
-}, function() {
+            $rootScope.selEsp = $scope.selectEsp;
 
-    $rootScope.selEsp = $scope.selectEsp;
-
-})
-
-$scope.newFlower = {
-    type: "Feature",
-    properties: {
-        commune: "",
-        image: "",
-        espece: "",
-    },
-    geometry: {
-        type: "Point",
-        coordinates: []
-    }
-};
-
-
-$scope.ifKnowName = function(positionPhoto) {
-
-    // An elaborate, custom popup
-    var myPopup = $ionicPopup.show({
-        templateUrl: "templates/ifName.html",
-        title: "Connaissez-vous le nom de l'espèce observée ?",
-        scope: $scope,
-        buttons: [{
-            text: 'Non'
-        }, {
-            text: '<b>Oui</b>',
-            type: 'button-positive',
-            onTap: function(e) {
-
-                $scope.showSelectName();
-
-            }
-        }]
+        })
     });
 
-}
+    $scope.resetflower = function() {
+        $scope.newFlower = {
+            type: "Feature",
+            properties: {
+                commune: {},
+                image: {},
+                espece: null,
+            },
+            geometry: {
+                type: "Point",
+                coordinates: []
+            }
+        };
 
-$scope.showSelectName = function() {
+    }
 
+$scope.resetflower();
 
-    // An elaborate, custom popup
-    var myPopup = $ionicPopup.show({
-        templateUrl: "templates/getNameFlower.html",
-        title: "Nom de l'espèce observée ",
-        scope: $scope,
-        cssClass: "popNameSelect",
-        buttons: [{
-            text: 'Non'
-        }, {
-            text: '<b>Publier</b>',
-            type: 'button-positive',
-            onTap: function(e) {
+    $scope.ifKnowName = function(positionPhoto) {
 
-
-
-                if (!$rootScope.selEsp) {
-                    $scope.invEsp = true;
-                    e.preventDefault();
-                } else {
-                    $scope.invEsp = false;
-                    $scope.newFlower.properties.commune = $scope.newCommune[0]._id;
-                    $scope.newFlower.properties.espece = $rootScope.selEsp.originalObject.ISFS;
-                    $scope.newFlower.properties.image = $scope.newImgId;
-
-
-                    $http({
-                        method: "POST",
-                        url: apiUrl + "/fleurs",
-                        headers: {
-                            "Content-type": "application/json"
-                        },
-                        data: {
-                            "flower": $scope.newFlower
-                        }
-                    }).success(function(data) {
-
-                        $ionicLoading.hide();
-
-                        console.log(data);
+        var myPopup = $ionicPopup.show({
+            templateUrl: "templates/ifName.html",
+            title: "Connaissez-vous le nom de l'espèce observée ?",
+            scope: $scope,
+            buttons: [{
+                text: 'Non',
+                onTap: function(e) {
 
 
-                    }).error(function(err) {
-                        $ionicLoading.hide();
-                        alert("Erreur de publication");
+                    var myPopupSecond = $ionicPopup.show({
+                        template: " <div> Votre saisie sera disponible sur la carte , vous ou d'autres personnes pourrons à tout moment ajouter les informations manquantes à votre saisie </div>",
+                        title: "Vous ne connaissez pas cette espèce?",
+                        subTitle: "Ce n'est pas grave...",
+                        scope: $scope,
+                        buttons: [{
+                            text: 'Annuler',
+                            onTap:function(){
+                                $scope.resetflower();
+                            }
+                        }, {
+                            text: '<b>Publier</b>',
+                            type: 'button-positive',
+                            onTap: function(e) {
 
+                                $scope.invEsp = false;
+                                $scope.newFlower.properties.commune = $scope.newCommune[0]._id;
+                                $scope.newFlower.properties.image = $scope.newImgId;
+
+                                $ionicLoading.show({
+                                    template: "Publication...",
+                                    delay: 750
+                                });
+
+                                $http({
+                                    method: "POST",
+                                    url: apiUrl + "/fleurs",
+                                    headers: {
+                                        "Content-type": "application/json"
+                                    },
+                                    data: {
+                                        "flower": $scope.newFlower
+                                    }
+                                }).success(function(data) {
+
+                                    $ionicLoading.hide();
+                                    $scope.resetflower();
+                                    $scope.displayFlowers();
+
+                                }).error(function(err) {
+                                    $ionicLoading.hide();
+                                });
+                            }
+                        }]
                     });
+                }
+            }, {
+                text: '<b>Oui</b>',
+                type: 'button-positive',
+                onTap: function(e) {
 
+                    $scope.showSelectName();
+
+                }
+            }]
+        });
+
+    }
+
+    $scope.showSelectName = function() {
+
+
+        // An elaborate, custom popup
+        var myPopup = $ionicPopup.show({
+            templateUrl: "templates/getNameFlower.html",
+            title: "Nom de l'espèce observée ",
+            scope: $scope,
+            cssClass: "popNameSelect",
+            buttons: [{
+                text: 'Annuler',
+                onTap:function(e){
+                    $scope.resetflower();
+                }
+            }, {
+                text: '<b>Publier</b>',
+                type: 'button-positive',
+                onTap: function(e) {
+
+                    if (!$rootScope.selEsp) {
+                        $scope.invEsp = true;
+                        e.preventDefault();
+                    } else {
+                        $scope.invEsp = false;
+                        $scope.newFlower.properties.commune = $scope.newCommune[0]._id;
+                        $scope.newFlower.properties.espece = $rootScope.selEsp.originalObject.ISFS;
+                        $scope.newFlower.properties.image = $scope.newImgId;
+                        $ionicLoading.show({
+                            template: "Publication",
+                            delay: 750
+                        });
+
+
+                        $http({
+                            method: "POST",
+                            url: apiUrl + "/fleurs",
+                            headers: {
+                                "Content-type": "application/json"
+                            },
+                            data: {
+                                "flower": $scope.newFlower
+                            }
+                        }).success(function(data) {
+
+                            $ionicLoading.hide();
+                            $scope.resetflower();
+                            $scope.displayFlowers();
+
+                            console.log(data);
+
+
+                        }).error(function(err) {
+                            $ionicLoading.hide();
+                            alert("Erreur de publication");
+
+                        });
+
+
+
+                    }
 
 
                 }
+            }]
 
 
-            }
-        }]
+        });
 
-
-    });
-
-}
+    }
 
 
 
-$scope.getPhoto = function() {
+    $scope.getPhoto = function() {
 
-    var lng = $scope.position.lng
-    var lat = $scope.position.lat
+        var lng = $scope.position.lng
+        var lat = $scope.position.lat
 
-    $scope.newFlower.geometry.coordinates.push(lng);
-    $scope.newFlower.geometry.coordinates.push(lat);
+        $scope.newFlower.geometry.coordinates.push(lng);
+        $scope.newFlower.geometry.coordinates.push(lat);
 
 
-    CameraService.getPicture({
-        quality: 100,
-        targetWidth: 400,
-        targetHeight: 600,
-        saveToPhotoAlbum: false,
-        correctOrientation: true,
-        encodingType: navigator.camera.EncodingType.JPEG,
-        destinationType: navigator.camera.DestinationType.DATA_URL
-    }).then(function(imageData) {
+        // CameraService.getPicture({
+        //     quality: 100,
+        //     targetWidth: 400,
+        //     targetHeight: 600,
+        //     saveToPhotoAlbum: false,
+        //     correctOrientation: true,
+        //     encodingType: navigator.camera.EncodingType.JPEG,
+        //     destinationType: navigator.camera.DestinationType.DATA_URL
+        // }).then(function(imageData) {
 
 
         $ionicLoading.show({
@@ -341,7 +402,7 @@ $scope.getPhoto = function() {
                 "Content-type": "application/json"
             },
             data: {
-                "imageB64": imageData
+                "imageB64": "lll" //imageData
             }
         }).success(function(idImg) {
 
@@ -352,39 +413,38 @@ $scope.getPhoto = function() {
             $scope.newImgId = idImg;
             $scope.ifKnowName();
 
+        }).error(function(err) {
+
+            alert("Impossible de charger l'image");
         });
-    }, function(err) {
-        alert("erorr" + err);
 
-        $scope.error = err;
-    });
+        // }, function(err) {
+        //     alert("erorr" + err);
 
-
-    $http({
-        method: "POST",
-        url: apiUrl + "/communes/geoloc",
-        headers: {
-            "Content-type": "application/json"
-        },
-        data: {
-            "zone": $scope.newFlower
-        }
-    }).success(function(data) {
+        //     $scope.error = err;
+        // });
 
 
-        $scope.newCommune = data;
+        $http({
+            method: "POST",
+            url: apiUrl + "/communes/geoloc",
+            headers: {
+                "Content-type": "application/json"
+            },
+            data: {
+                "zone": $scope.newFlower
+            }
+        }).success(function(data) {
+            $scope.newCommune = data;
+            console.log($scope.newCommune);
 
-        console.log($scope.newCommune);
+        }).error(function(err) {
+            $scope.newCommune = {};
+            alert("Commune introuvable");
 
+        })
 
-    }).error(function(err) {
-        $scope.newCommune = {};
-        alert("Commune introuvable");
-
-    });
-
-
-}
+    }
 
 })
 

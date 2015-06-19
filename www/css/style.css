@@ -16,10 +16,13 @@ h2 {
   text-align: center;
 }
 
-
+.popNameSelect h3{
+  margin-top:0px;
+}
 .popNameSelect .popup {
 width: 95%;
 height: 95%;
+
 
 }
 
