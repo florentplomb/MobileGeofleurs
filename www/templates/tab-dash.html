@@ -1,41 +1,27 @@
-  <ion-view view-title="Dashboard" ng-controller="MapCtrl">
-     <ion-nav-buttons side="secondary">
-    <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
-  </ion-nav-buttons>
-
-  <ion-content  scroll='false'>
-  <div   id="map">
-
-<leaflet   data-tap-disabled="true"  defaults="defaults"  markers="markers" center="center" maxbounds="maxbounds"  height="100%"></leaflet>
-
-
-  </div>
-
-      <div class="locate"  ng-show="geoloc1">
-    <i    class="fa fa-spinner fa-spin" style="font-size:1.4em;">
+<ion-view view-title="Dashboard" ng-controller="MapCtrl">
+    <ion-nav-buttons side="secondary">
+        <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
+    </ion-nav-buttons>
+    <ion-content scroll='false'>
+        <div id="map">
+            <leaflet data-tap-disabled="true" defaults="defaults" markers="markers" center="center" maxbounds="maxbounds" height="100%"></leaflet>
+        </div>
+        <div class="locate" ng-show="geoloc1">
+            <i class="fa fa-spinner fa-spin" style="font-size:1.4em;">
     </i>
-</div>
-    <div class="locate" ng-show="geoloc2" ng-click="stopgeo()">
-    <i  class="fa fa-map-marker" style="font-size:1.6em; color:#fc8428;">
+        </div>
+        <div class="locate" ng-show="geoloc2" ng-click="stopgeo()">
+            <i class="fa fa-map-marker" style="font-size:1.6em; color:#fc8428;">
     </i>
-     </div>
-<div class="locate" ng-show="geoloc3" ng-click="startgeo()">
-    <i  class="fa fa-map-marker" style="font-size:1.6em;">
+        </div>
+        <div class="locate" ng-show="geoloc3" ng-click="startgeo()">
+            <i class="fa fa-map-marker" style="font-size:1.6em;">
     </i>
-  </div>
-
-   <!--  <i  class="fa fa-map-marker" ng-hide="geolocOn" ng-click="startgeo()"style="font-size:1.2em;"  >
-    </i>
-
-
-
-    <div  ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">
-    <button id="b1map"  class="button button-full button-calm">
-      Ajouter une nouvelle fleur <i class="ion-plus-circled"> </i>
-    </button>
-  </div>
-
-  </div>
-  </ion-content>
-
+        </div>
+        <div ng-controller="PhotoCtrl" id="newFleurs" ng-click="getPhoto()" class="buttonMap">
+            <button id="b1map" class="button button-full button-calm">
+                Ajouter une nouvelle fleur <i class="ion-plus-circled"> </i>
+            </button>
+        </div>
+    </ion-content>
 </ion-view>
