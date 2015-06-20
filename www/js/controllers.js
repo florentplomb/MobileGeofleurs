@@ -6,22 +6,33 @@ underscore.factory('_', function() {
 angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-directive', 'ngCordova', 'angucomplete-alt'])
 
 //.constant('apiUrl', 'http://localhost:8100/api-proxy')
-.constant('apiUrl', 'http://localhost:8100/local-proxy')
+//.constant('apiUrl', 'http://localhost:8100/local-proxy')
 
-//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 
-
-.controller('MapCtrl', function($scope, $ionicLoading, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
+.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopup, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
 
     $rootScope.markers = [];
     $scope.searchEsp = "NOMC";
     $scope.searchEspInv = "NOML";
     $scope.valideEsp = "";
 
+      var flowerIcon = {
+
+    iconUrl: 'img/fIcon2.png',
+    iconSize: [28, 40],
+    //shadowSize: [50, 64],
+    //iconAnchor: [22, 94],
+
+  };
+
 
     EspService.getEspName(function(err, data) {
-        if (err) $scope.error = err;
+        if (err) {
+            $scope.error = err;
+            $scope.showAlert("Liste d'espèces indisponible");
+        }
         $scope.espNames = data;
 
     });
@@ -43,32 +54,47 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
             delay: 750
         });
 
+        $scope.showAlert = function(titleContent) {
+            var alertPopup = $ionicPopup.alert({
+                title: titleContent,
+                template: 'Veuillez vérifier la connection '
+            });
+
+        };
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
+
                 $ionicLoading.hide();
+                $scope.showAlert("Publication indisponible");
                 $scope.error = err;
+
+            } else {
+
+                angular.forEach(flowers, function(flower) {
+
+                    console.log(flower)
+                    $scope.urlImgID = apiUrl + "/images/";
+                    console.log($scope.urlImgID);
+                    $scope.markers.push({
+                        lng: parseFloat(flower.geometry.coordinates[0]),
+                        lat: parseFloat(flower.geometry.coordinates[1]),
+                        id: flower._id,
+                        icon : flowerIcon,
+                        //  message : "hello",
+                        message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                        getMessageScope: function() {
+                            var scope = $scope.$new();
+                            scope.flower = flower;
+                            return scope;
+                        }
+
+                    });
+
+                })
+                $ionicLoading.hide()
             }
 
-            angular.forEach(flowers, function(flower) {
-                $scope.urlImgID = apiUrl + "/images/" + flower.properties.image;
-                $scope.markers.push({
-
-                    lng: parseFloat(flower.geometry.coordinates[0]),
-                    lat: parseFloat(flower.geometry.coordinates[1]),
-                    id: flower._id,
-                    //  message : "hello",
-                    message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
-                    getMessageScope: function() {
-                        var scope = $scope.$new();
-                        scope.flower = flower;
-                        return scope;
-                    }
-
-                });
-
-            })
-            $ionicLoading.hide();
         });
     };
 
@@ -93,9 +119,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
     };
 
-    $scope.geoloc1 = true;
-    $scope.geoloc2 = false;
-    $scope.geoloc3 = false;
+    $scope.geolocLoad = true;
+    $scope.geolocOn = false;
+    $scope.geolocOff = false;
 
     leafletData.getMap().then(function(map) {
         if (map._controlCorners.bottomleft.childElementCount === 0) {
@@ -112,19 +138,20 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                 }
             }).addTo(map);
             lc.start();
-            console.log("geoloc");
+
 
         }
 
         $scope.stopgeo = function() {
-            $scope.geoloc2 = false;
-            $scope.geoloc3 = true;
+            $scope.geolocOn = false;
+            $scope.geolocOff = true;
+            $scope.geolocLoad = false;
             lc.stop();
         }
         $scope.startgeo = function() {
-
-            $scope.geoloc2 = true;
-            $scope.geoloc3 = false;
+             $scope.geolocLoad = true;
+            $scope.geolocOn = false;
+            $scope.geolocOff = false;
             lc.start();
 
         }
@@ -141,36 +168,55 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         map.on('locationfound', function(e) {
 
             $scope.position = e.latlng
-            $scope.geoloc2 = true;
-            $scope.geoloc1 = false;
-            $scope.geoloc3 = false;
+            $scope.geolocOn = true;
+            $scope.geolocLoad = false;
+            $scope.geolocOff = false;
 
         });
 
         map.on('locationerror', function(e) {
-            $scope.geoloc1 = true;
-            $scope.geoloc2 = false;
-            $scope.geoloc3 = false;
+            $scope.geolocLoad = true;
+            $scope.geolocOn = false;
+            $scope.geolocOff = false;
 
-            if (!alert("Géolocalisation impossible: Activer le GPS , préférer les endroits dégagés")) {
-                window.location.reload();
-            }
+            $scope.showConfirm = function() {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Géolocalisation impossible',
+                    template: 'Activer le GPS , préférer les endroits dégagés. <div style="text-align:center;">Voulez-vous réessayer ?</div> ',
+                    scope: $scope,
+                    buttons: [{
+                        text: 'Non',
+                        type: 'button-assertive',
+                        onTap: function() {
+                            lc.stop();
+                            $scope.geolocLoad = false;
+                            $scope.geolocOn = false;
+                            $scope.geolocOff = true;
+                        }
 
+                    }, {
+                        text: '<b>Oui</b>',
+                        type: 'button-positive',
+                        onTap: function() {
+                            lc.stop();
+                            lc.start();
+                        }
+                    }]
+
+                });
+
+            };
+
+            $scope.showConfirm();
+
+            // lc.stop();
 
 
         })
 
     });
 
-    function pop() {
-        var alertPopup = $ionicPopup.alert({
-            title: 'Impossible to get position active your geoloc or try later'
 
-        });
-        alertPopup.then(function(res) {
-
-        });
-    };
 
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
     mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
@@ -189,7 +235,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
     $scope.urlImg = apiUrl + "/images/"
     flowersService.getByIdflower(function(err, flower) {
-        if (err) $scope.error = err;
+        if (err) {
+            $scope.error = err;
+            $scope.showAlert("Publication indisponible");
+        }
 
         $scope.flower = flower;
 
@@ -226,7 +275,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
     }
 
-$scope.resetflower();
+    $scope.resetflower();
 
     $scope.ifKnowName = function(positionPhoto) {
 
@@ -238,15 +287,14 @@ $scope.resetflower();
                 text: 'Non',
                 onTap: function(e) {
 
-
                     var myPopupSecond = $ionicPopup.show({
                         template: " <div> Votre saisie sera disponible sur la carte , vous ou d'autres personnes pourrons à tout moment ajouter les informations manquantes à votre saisie </div>",
                         title: "Vous ne connaissez pas cette espèce?",
                         subTitle: "Ce n'est pas grave...",
                         scope: $scope,
                         buttons: [{
-                            text: 'Annuler',
-                            onTap:function(){
+                            text: 'Annuler  ',
+                            onTap: function() {
                                 $scope.resetflower();
                             }
                         }, {
@@ -279,7 +327,9 @@ $scope.resetflower();
                                     $scope.displayFlowers();
 
                                 }).error(function(err) {
+                                    $scope.showAlert("Problème de publication");
                                     $ionicLoading.hide();
+                                    $scope.resetflower();
                                 });
                             }
                         }]
@@ -300,7 +350,6 @@ $scope.resetflower();
 
     $scope.showSelectName = function() {
 
-
         // An elaborate, custom popup
         var myPopup = $ionicPopup.show({
             templateUrl: "templates/getNameFlower.html",
@@ -309,7 +358,7 @@ $scope.resetflower();
             cssClass: "popNameSelect",
             buttons: [{
                 text: 'Annuler',
-                onTap:function(e){
+                onTap: function(e) {
                     $scope.resetflower();
                 }
             }, {
@@ -330,7 +379,6 @@ $scope.resetflower();
                             delay: 750
                         });
 
-
                         $http({
                             method: "POST",
                             url: apiUrl + "/fleurs",
@@ -350,15 +398,13 @@ $scope.resetflower();
 
 
                         }).error(function(err) {
+                            $scope.resetflower();
                             $ionicLoading.hide();
-                            alert("Erreur de publication");
+                            $scope.showAlert("Publication indisponible");
 
                         });
 
-
-
                     }
-
 
                 }
             }]
@@ -368,6 +414,87 @@ $scope.resetflower();
 
     }
 
+
+//     $scope.getPhoto = function() {
+
+//         var lng = 6.6; //$scope.position.lng
+//         var lat = 46.6; //$scope.position.lat
+
+//         $scope.newFlower.geometry.coordinates.push(lng);
+//         $scope.newFlower.geometry.coordinates.push(lat);
+
+
+//         // CameraService.getPicture({
+//         //     quality: 100,
+//         //     targetWidth: 400,
+//         //     targetHeight: 600,
+//         //     saveToPhotoAlbum: false,
+//         //     correctOrientation: true,
+//         //     encodingType: navigator.camera.EncodingType.JPEG,
+//         //     destinationType: navigator.camera.DestinationType.DATA_URL
+//         // }).then(function(imageData) {
+
+
+//         $ionicLoading.show({
+//             template: "Chargement de l'image...",
+//             delay: 750
+//         });
+
+//         $http({
+//             method: "POST",
+//             url: apiUrl + "/images",
+//             headers: {
+//                 "Content-type": "application/json"
+//             },
+//             data: {
+//                 "imageB64": "lll" //imageData
+//             }
+//         }).success(function(idImg) {
+
+
+//             $ionicLoading.hide();
+
+//             $scope.UrlnewImg = apiUrl + "/images/" + idImg;
+//             $scope.newImgId = idImg;
+//             $scope.ifKnowName();
+
+//         }).error(function(err) {
+
+//             $scope.showAlert("L'image ne peux pas être chargée");
+//             $scope.resetflower();
+//         });
+
+//         // }, function(err) {
+//         //     alert("erorr" + err);
+
+//         //     $scope.error = err;
+
+//         // });
+
+
+//         $http({
+//             method: "POST",
+//             url: apiUrl + "/communes/geoloc",
+//             headers: {
+//                 "Content-type": "application/json"
+//             },
+//             data: {
+//                 "zone": $scope.newFlower
+//             }
+//         }).success(function(data) {
+//             $scope.newCommune = data;
+//             console.log($scope.newCommune);
+
+//         }).error(function(err) {
+//             $scope.resetflower();
+//             $scope.newCommune = {};
+//             $scope.showAlert("La liste des communes ne peux pas être chargée");
+
+//         })
+
+//     }
+
+// })
 
 
     $scope.getPhoto = function() {
@@ -379,50 +506,51 @@ $scope.resetflower();
         $scope.newFlower.geometry.coordinates.push(lat);
 
 
-        // CameraService.getPicture({
-        //     quality: 100,
-        //     targetWidth: 400,
-        //     targetHeight: 600,
-        //     saveToPhotoAlbum: false,
-        //     correctOrientation: true,
-        //     encodingType: navigator.camera.EncodingType.JPEG,
-        //     destinationType: navigator.camera.DestinationType.DATA_URL
-        // }).then(function(imageData) {
+        CameraService.getPicture({
+            quality: 100,
+            targetWidth: 400,
+            targetHeight: 600,
+            saveToPhotoAlbum: false,
+            correctOrientation: true,
+            encodingType: navigator.camera.EncodingType.JPEG,
+            destinationType: navigator.camera.DestinationType.DATA_URL
+        }).then(function(imageData) {
 
 
-        $ionicLoading.show({
-            template: "Chargement de l'image...",
-            delay: 750
+            $ionicLoading.show({
+                template: "Chargement de l'image...",
+                delay: 750
+            });
+
+            $http({
+                method: "POST",
+                url: apiUrl + "/images",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                data: {
+                    "imageB64": imageData
+                }
+            }).success(function(idImg) {
+
+
+                $ionicLoading.hide();
+
+                $scope.UrlnewImg = apiUrl + "/images/" + idImg;
+                $scope.newImgId = idImg;
+                $scope.ifKnowName();
+
+            }).error(function(err) {
+                $scope.resetflower();
+                $ionicLoading.hide();
+                alert("Impossible de charger l'image");
+            });
+
+        }, function(err) {
+            alert("erorr" + err);
+            $scope.resetflower();
+            $scope.error = err;
         });
-
-        $http({
-            method: "POST",
-            url: apiUrl + "/images",
-            headers: {
-                "Content-type": "application/json"
-            },
-            data: {
-                "imageB64": "lll" //imageData
-            }
-        }).success(function(idImg) {
-
-
-            $ionicLoading.hide();
-
-            $scope.UrlnewImg = apiUrl + "/images/" + idImg;
-            $scope.newImgId = idImg;
-            $scope.ifKnowName();
-
-        }).error(function(err) {
-
-            alert("Impossible de charger l'image");
-        });
-
-        // }, function(err) {
-        //     alert("erorr" + err);
-
-        //     $scope.error = err;
-        // });
 
 
         $http({
@@ -472,7 +600,6 @@ $scope.resetflower();
 
 .factory("EspService", function($http, apiUrl) {
 
-
     var config = {
         headers: {
             "Content-type": "application/json"
@@ -492,7 +619,6 @@ $scope.resetflower();
 
 
 .factory("flowersService", function($http, apiUrl) {
-
 
     var config = {
         headers: {
@@ -517,7 +643,6 @@ $scope.resetflower();
     };
 
 })
-
 
 .controller('RegisterCtrl', function($scope, AuthService, $ionicHistory, $rootScope, $ionicPopup, $state, apiUrl, $ionicLoading, $http) {
 

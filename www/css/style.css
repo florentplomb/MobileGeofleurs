@@ -5,7 +5,11 @@ html, body {
 }
 
 
+#selectedEsp{
 
+background-color: #fff;
+
+}
 #map {
 
 	height: 100%;
@@ -16,9 +20,12 @@ h2 {
   text-align: center;
 }
 
-.popNameSelect h3{
-  margin-top:0px;
+form h3 {
+  text-align: center ;
+  margin-top: 20px;
 }
+
+
 .popNameSelect .popup {
 width: 95%;
 height: 95%;

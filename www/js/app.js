@@ -7,8 +7,11 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$ionicPopup) {
+
+
   $ionicPlatform.ready(function() {
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -18,6 +21,23 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
+
+
+    if(window.Connection) {
+
+
+                if(navigator.connection.type == Connection.NONE) {
+                    $ionicPopup.alert({
+                        title: "Internet Disconnected",
+                        content: "Please check your data connection and start app again"
+                    })
+                    .then(function() {
+
+                            ionic.Platform.exitApp();
+                        })
+
+                }
+            }
   });
 })
        .run(function (AuthService, $rootScope, $state) {

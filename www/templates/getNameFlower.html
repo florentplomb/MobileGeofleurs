@@ -9,20 +9,20 @@
 
 
 
-<h3> Espèce séléctionée : </h3>
-<div id="Global">
-  <div id="gauche">
+<h3> Espèce séléctionée  </h3>
+
+  <div id="selectedEsp" class="item">
               <div>
-            <p>Nom commmun: {{selectEsp.originalObject.NOMC}} </p>
+            <h6> Nom commmun: {{selectEsp.originalObject.NOMC}} </h6>
         </div>
         <div>
-             <p>Nom latin : {{selectEsp.originalObject.NOML}}  </p>
+             <h6>Nom latin : {{selectEsp.originalObject.NOML}}</h6>
         </div>
         <div>
-             <p>Commune de la saisie : {{newCommune[0].properties.NAME}}  </p>
+             <h6>Commune de la saisie : {{newCommune[0].properties.NAME}}  </h6>
         </div>
     </div>
-  </div>
+
 </div>
 <div ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
   <p ng-hide="afficherImg"> Afficher ma photo  </p>

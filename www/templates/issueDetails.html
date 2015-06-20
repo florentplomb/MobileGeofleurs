@@ -6,13 +6,14 @@
           <div class="list card">
 
   <div class="item item-avatar">
-    <img src="avatar.jpg">
-    <h2>Pretty Hate Machine</h2>
-    <p>Nine Inch Nails</p>
+
+    <h2>{{flower.properties.espece.NOMC}}</h2>
+    <p>{{flower.properties.espece.NOML}}</p>
+    <p>{{flower.properties.commune.properties.NAME}}</p>
   </div>
 
   <div class="item item-image">
-    <img src="cover.jpg">
+    <img src="{{urlImg+flower.properties.image}}">
   </div>
 
   <a class="item item-icon-left assertive" href="#">
