@@ -6,27 +6,29 @@ underscore.factory('_', function() {
 angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-directive', 'ngCordova', 'angucomplete-alt'])
 
 //.constant('apiUrl', 'http://localhost:8100/api-proxy')
-//.constant('apiUrl', 'http://localhost:8100/local-proxy')
+.constant('apiUrl', 'http://localhost:8100/local-proxy')
 
-.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 
-.controller('MapCtrl', function($scope, $ionicLoading, $ionicPopup, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
+.controller('MapCtrl', function($scope, $ionicLoading, AuthService, $ionicPopup, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
 
     $rootScope.markers = [];
     $scope.searchEsp = "NOMC";
     $scope.searchEspInv = "NOML";
     $scope.valideEsp = "";
 
-      var flowerIcon = {
 
-    iconUrl: 'img/fIcon2.png',
-    iconSize: [28, 40],
-    //shadowSize: [50, 64],
-    //iconAnchor: [22, 94],
+    console.log(AuthService.currentUser);
 
-  };
+    var flowerIcon = {
 
+        iconUrl: 'img/fIcon2.png',
+        iconSize: [28, 40],
+        //shadowSize: [50, 64],
+        //iconAnchor: [22, 94],
+
+    };
 
     EspService.getEspName(function(err, data) {
         if (err) {
@@ -36,7 +38,6 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         $scope.espNames = data;
 
     });
-
 
     $scope.goDetail = function(flowerId) {
         console.log(flowerId);
@@ -80,7 +81,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                         lng: parseFloat(flower.geometry.coordinates[0]),
                         lat: parseFloat(flower.geometry.coordinates[1]),
                         id: flower._id,
-                        icon : flowerIcon,
+                        icon: flowerIcon,
                         //  message : "hello",
                         message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
                         getMessageScope: function() {
@@ -149,7 +150,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
             lc.stop();
         }
         $scope.startgeo = function() {
-             $scope.geolocLoad = true;
+            $scope.geolocLoad = true;
             $scope.geolocOn = false;
             $scope.geolocOff = false;
             lc.start();
@@ -218,9 +219,8 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 
 
-    var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "cleliapanchaud.kajpf86n";
-    mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiY2xlbGlhcGFuY2hhdWQiLCJhIjoiM2hMOEVXYyJ9.olp7FrLzmzSadE07IY8OMQ";
-    $scope.defaults = {
+ var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "fplomb.685fc191";
+  mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiZnBsb21iIiwiYSI6ImJwRUF2ZlkifQ.OIuXY-qgnEBzcnYwXg8imw";    $scope.defaults = {
         tileLayer: mapboxTileLayer
     };
 
@@ -247,7 +247,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
 
 })
 
-.controller('PhotoCtrl', function($scope, $timeout, flowersService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
+.controller('PhotoCtrl', function($scope, $timeout,AuthService, flowersService, $rootScope, $state, $ionicPopup, CameraService, apiUrl, $http, $ionicLoading) {
 
     $timeout(function() {
         $scope.$watch(function() {
@@ -263,6 +263,7 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
         $scope.newFlower = {
             type: "Feature",
             properties: {
+                user: $rootScope.userTok,
                 commune: {},
                 image: {},
                 espece: null,
@@ -314,6 +315,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                                 $http({
                                     method: "POST",
                                     url: apiUrl + "/fleurs",
+                                    params: {
+                                        access_token: AuthService.currentUser
+                                    },
                                     headers: {
                                         "Content-type": "application/json"
                                     },
@@ -382,6 +386,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                         $http({
                             method: "POST",
                             url: apiUrl + "/fleurs",
+                            params: {
+                                access_token: AuthService.currentUser
+                            },
                             headers: {
                                 "Content-type": "application/json"
                             },
@@ -389,14 +396,10 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                                 "flower": $scope.newFlower
                             }
                         }).success(function(data) {
-
                             $ionicLoading.hide();
                             $scope.resetflower();
                             $scope.displayFlowers();
-
                             console.log(data);
-
-
                         }).error(function(err) {
                             $scope.resetflower();
                             $ionicLoading.hide();
@@ -415,106 +418,24 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
     }
 
 
-//     $scope.getPhoto = function() {
+        $scope.getPhoto = function() {
 
-//         var lng = 6.6; //$scope.position.lng
-//         var lat = 46.6; //$scope.position.lat
+            var lng = $scope.position.lng;
+            var lat =  $scope.position.lat;
 
-//         $scope.newFlower.geometry.coordinates.push(lng);
-//         $scope.newFlower.geometry.coordinates.push(lat);
-
-
-//         // CameraService.getPicture({
-//         //     quality: 100,
-//         //     targetWidth: 400,
-//         //     targetHeight: 600,
-//         //     saveToPhotoAlbum: false,
-//         //     correctOrientation: true,
-//         //     encodingType: navigator.camera.EncodingType.JPEG,
-//         //     destinationType: navigator.camera.DestinationType.DATA_URL
-//         // }).then(function(imageData) {
+            $scope.newFlower.geometry.coordinates.push(lng);
+            $scope.newFlower.geometry.coordinates.push(lat);
 
 
-//         $ionicLoading.show({
-//             template: "Chargement de l'image...",
-//             delay: 750
-//         });
-
-//         $http({
-//             method: "POST",
-//             url: apiUrl + "/images",
-//             headers: {
-//                 "Content-type": "application/json"
-//             },
-//             data: {
-//                 "imageB64": "lll" //imageData
-//             }
-//         }).success(function(idImg) {
-
-
-//             $ionicLoading.hide();
-
-//             $scope.UrlnewImg = apiUrl + "/images/" + idImg;
-//             $scope.newImgId = idImg;
-//             $scope.ifKnowName();
-
-//         }).error(function(err) {
-
-//             $scope.showAlert("L'image ne peux pas être chargée");
-//             $scope.resetflower();
-//         });
-
-//         // }, function(err) {
-//         //     alert("erorr" + err);
-
-//         //     $scope.error = err;
-
-//         // });
-
-
-//         $http({
-//             method: "POST",
-//             url: apiUrl + "/communes/geoloc",
-//             headers: {
-//                 "Content-type": "application/json"
-//             },
-//             data: {
-//                 "zone": $scope.newFlower
-//             }
-//         }).success(function(data) {
-//             $scope.newCommune = data;
-//             console.log($scope.newCommune);
-
-//         }).error(function(err) {
-//             $scope.resetflower();
-//             $scope.newCommune = {};
-//             $scope.showAlert("La liste des communes ne peux pas être chargée");
-
-//         })
-
-//     }
-
-// })
-
-
-    $scope.getPhoto = function() {
-
-        var lng = $scope.position.lng
-        var lat = $scope.position.lat
-
-        $scope.newFlower.geometry.coordinates.push(lng);
-        $scope.newFlower.geometry.coordinates.push(lat);
-
-
-        CameraService.getPicture({
-            quality: 100,
-            targetWidth: 400,
-            targetHeight: 600,
-            saveToPhotoAlbum: false,
-            correctOrientation: true,
-            encodingType: navigator.camera.EncodingType.JPEG,
-            destinationType: navigator.camera.DestinationType.DATA_URL
-        }).then(function(imageData) {
+            // CameraService.getPicture({
+            //     quality: 100,
+            //     targetWidth: 400,
+            //     targetHeight: 600,
+            //     saveToPhotoAlbum: false,
+            //     correctOrientation: true,
+            //     encodingType: navigator.camera.EncodingType.JPEG,
+            //     destinationType: navigator.camera.DestinationType.DATA_URL
+            // }).then(function(imageData) {
 
 
             $ionicLoading.show({
@@ -525,11 +446,14 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
             $http({
                 method: "POST",
                 url: apiUrl + "/images",
+                 params: {
+                    access_token: AuthService.currentUser
+                },
                 headers: {
                     "Content-type": "application/json"
                 },
                 data: {
-                    "imageB64": imageData
+                    "imageB64": "lll" //imageData
                 }
             }).success(function(idImg) {
 
@@ -541,40 +465,131 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
                 $scope.ifKnowName();
 
             }).error(function(err) {
+
+                $scope.showAlert("L'image ne peux pas être chargée");
                 $scope.resetflower();
-                $ionicLoading.hide();
-                alert("Impossible de charger l'image");
             });
 
-        }, function(err) {
-            alert("erorr" + err);
-            $scope.resetflower();
-            $scope.error = err;
-        });
+            // }, function(err) {
+            //     alert("erorr" + err);
+
+            //     $scope.error = err;
+
+            // });
 
 
-        $http({
-            method: "POST",
-            url: apiUrl + "/communes/geoloc",
-            headers: {
-                "Content-type": "application/json"
+            $http({
+                method: "POST",
+                url: apiUrl + "/communes/geoloc",
+    params :{
+                access_token: AuthService.currentUser
             },
-            data: {
-                "zone": $scope.newFlower
-            }
-        }).success(function(data) {
-            $scope.newCommune = data;
-            console.log($scope.newCommune);
+                headers: {
+                    "Content-type": "application/json"
+                },
+                data: {
+                    "zone": $scope.newFlower
+                }
+            }).success(function(data) {
+                $scope.newCommune = data;
+                console.log($scope.newCommune);
 
-        }).error(function(err) {
-            $scope.newCommune = {};
-            alert("Commune introuvable");
+            }).error(function(err) {
+                $scope.resetflower();
+                $scope.newCommune = {};
+                $scope.showAlert("La liste des communes ne peux pas être chargée");
 
-        })
+            })
 
-    }
+        }
 
-})
+    })
+
+
+//     $scope.getPhoto = function() {
+
+//         var lng = $scope.position.lng
+//         var lat = $scope.position.lat
+
+//         $scope.newFlower.geometry.coordinates.push(lng);
+//         $scope.newFlower.geometry.coordinates.push(lat);
+
+
+//         CameraService.getPicture({
+//             quality: 100,
+//             targetWidth: 400,
+//             targetHeight: 600,
+//             saveToPhotoAlbum: false,
+//             correctOrientation: true,
+//             encodingType: navigator.camera.EncodingType.JPEG,
+//             destinationType: navigator.camera.DestinationType.DATA_URL
+//         }).then(function(imageData) {
+
+
+//             $ionicLoading.show({
+//                 template: "Chargement de l'image...",
+//                 delay: 750
+//             });
+
+//             $http({
+//                 method: "POST",
+//                 url: apiUrl + "/images",
+//                 params: {
+//                     access_token: AuthService.currentUser
+//                 },
+//                 headers: {
+//                     "Content-type": "application/json"
+//                 },
+//                 data: {
+//                     "imageB64": imageData
+//                 }
+//             }).success(function(idImg) {
+
+
+//                 $ionicLoading.hide();
+
+//                 $scope.UrlnewImg = apiUrl + "/images/" + idImg;
+//                 $scope.newImgId = idImg;
+//                 $scope.ifKnowName();
+
+//             }).error(function(err) {
+//                 $scope.resetflower();
+//                 $ionicLoading.hide();
+//                 alert("Impossible de charger l'image");
+//             });
+
+//         }, function(err) {
+//             alert("erorr" + err);
+//             $scope.resetflower();
+//             $scope.error = err;
+//         });
+
+
+//         $http({
+//             method: "POST",
+//             url: apiUrl + "/communes/geoloc",
+//             params: {
+//                 access_token: AuthService.currentUser
+//             },
+//             headers: {
+//                 "Content-type": "application/json"
+//             },
+//             data: {
+//                 "zone": $scope.newFlower
+//             }
+//         }).success(function(data) {
+//             $scope.newCommune = data;
+//             console.log($scope.newCommune);
+
+//         }).error(function(err) {
+//             $scope.newCommune = {};
+//             alert("Commune introuvable");
+
+//         })
+
+//     }
+
+// })
 
 
 
@@ -748,11 +763,9 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
             }
         }).success(function(user) {
 
+            $rootScope.userTok = user;
 
 
-            $rootScope.user = user;
-            console.log(user);
-            AuthService.setSalt(user);
             AuthService.setUser(user);
             // Hide the loading message.
             $ionicLoading.hide();
@@ -799,10 +812,11 @@ angular.module('starter.controllers', ['starter.services', 'ionic', 'leaflet-dir
     }
 })
 
-.controller('LogoutCtrl', function(AuthService, $scope, $state) {
+.controller('LogoutCtrl', function(AuthService, $rootScope, $scope, $state) {
 
     $scope.logOut = function() {
         AuthService.unsetUser();
+         $rootScope.userTok = null;
         console.log('logout');
         $state.go('login');
     };

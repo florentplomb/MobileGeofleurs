@@ -43,7 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
        .run(function (AuthService, $rootScope, $state) {
             $rootScope.$on('$stateChangeStart', function (event, toState) {
            // If the user is not logged in and is trying to access another state than "login"...
-        if (!AuthService.currentUserId && toState.name !== 'login' && toState.name !== 'register') {
+        if (!AuthService.currentUser && toState.name !== 'login' && toState.name !== 'register') {
             console.log('Activating login');
 
 // ... then cancel the transition and go to the "login" state instead.
