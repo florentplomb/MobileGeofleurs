@@ -1,4 +1,9 @@
 <ion-view view-title="Dashboard" ng-controller="MapCtrl">
+  <ion-nav-buttons side="primary">
+
+  <div><i id="author" class="icon ion-person iconsize"></i> {{currentUser.pseudo}}</div>
+
+    </ion-nav-buttons>
     <ion-nav-buttons side="secondary">
         <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
     </ion-nav-buttons>

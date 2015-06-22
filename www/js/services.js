@@ -7,7 +7,7 @@ angular.module('starter.services', ['angular-storage'])
 
 
     setUser: function(user) {
-      console.log(user);
+
       service.currentUser = user;
       store.set('currentUser', user); // stock userid la je pourrais rajouter se role
     },

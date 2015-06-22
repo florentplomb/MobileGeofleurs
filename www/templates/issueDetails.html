@@ -4,12 +4,14 @@
           <ion-content>
 
           <div class="list card">
-  <p>{{flower.properties.user.pseudo}}</p>
-  <div class="item item-avatar">
+
+  <div class="item item-avatar center">
+
 
     <h2>{{flower.properties.espece.NOMC}}</h2>
     <p>{{flower.properties.espece.NOML}}</p>
-    <p>{{flower.properties.commune.properties.NAME}}</p>
+    <p><i id="author" class="icon  ion-ios-location"></i> {{flower.properties.commune.properties.NAME}}</p>
+    <p><i id="author" class="icon ion-person iconsize balanced"></i> {{flower.properties.user.pseudo}}</p>
   </div>
 
   <div class="item item-image">
