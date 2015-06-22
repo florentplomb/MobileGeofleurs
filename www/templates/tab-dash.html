@@ -5,7 +5,7 @@
 
     </ion-nav-buttons>
     <ion-nav-buttons side="secondary">
-        <button type="button" ng-controller="LogoutCtrl" ng-click="logOut()" class="button"><i class="icon ion-power"></i></button>
+        <button type="button" ng-controller="LogoutCtrl" ng-click="logOut(); stopGeo();" class="button"><i class="icon ion-power"></i></button>
     </ion-nav-buttons>
     <ion-content scroll='false'>
         <div id="map">

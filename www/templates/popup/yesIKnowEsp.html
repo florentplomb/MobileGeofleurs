@@ -2,17 +2,17 @@
     <div class="popup-head">
         <h3 class="popup-title">Selectionner l'espèce observée !</h3>
     </div>
-    <div class="popup-body">
-        <form name "espForm" ng-controller="PhotoCtrl">
+    <div class="popup-body" ng-controller="PhotoCtrl">
+        <form name "espForm" >
             <div>
-                <div style="text-align:left;">
+                <div  style="text-align:left;">
                     <angucomplete-alt template-url="template" id="ex1" input-changed="inputChanged" input-class="{{valideEsp}}" description-field="NOML" placeholder="( min. 3 lettres ) Nom commun ou latin"  selected-object="selectEsp" local-data="espNames" search-fields="NOMC,NOML" title-field="NOMC" minlength="3" match-class="highlight" />
                 </div>
-                <p ng-show="invEsp" style="color : red ; font-size: 12px; margin: 0px ,text-align:left;">*Veuillez séléctioner une espèce présente de la liste</p>
+                <p ng-hide="selEsp" style="color : red ; font-size: 10px; margin-left: 3px ; text-align:left;">*Veuillez séléctioner une espèce présente dans la liste</p>
                 <h3> Espèce séléctionée  </h3>
                 <div id="selectedEsp" class="item">
                     <div>
-                        <h6> Nom commmun: {{selectEsp.originalObject.NOMC}} </h6>
+                        <h6>Nom commmun: {{selectEsp.originalObject.NOMC}} </h6>
                     </div>
                     <div>
                         <h6>Nom latin : {{selectEsp.originalObject.NOML}}</h6>
@@ -33,16 +33,16 @@
         <button class="button  button-stable" ng-click="closeThisDialog(); resetflower(); ">
            Annuler
         </button>
-        <button class="button  button-positive" ng-click="closeThisDialog();  noIDontknowEsp();">
+        <button class="button  button-positive" ng-disabled="!selEsp" ng-click="closeThisDialog();  publish();">
             Publier
         </button>
     </div>
 </div>
-<script type="text/ng-template" id="template" ng-controller="PhotoCtrl">
+<script type="text/ng-template" id="template">
     <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
         <label class="item item-input">
             <i class="icon ion-search placeholder-icon"></i>
-            <input autofocus id="{{id}}_value" name={{inputName}} ng-class="{'angucomplete-input-not-empty': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)" />
+            <input autofocus id="{{id}}_value" ; name={{inputName}} ng-class="{'angucomplete-input-not-empty': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)" />
         </label>
         <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">
             <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>

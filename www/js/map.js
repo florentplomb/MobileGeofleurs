@@ -49,10 +49,32 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
         $scope.showAlert = function(titleContent) {
             var alertPopup = $ionicPopup.alert({
                 title: titleContent,
-                template: 'Veuillez vérifier la connection '
+                template: 'Veuillez vérifier la connection'
             });
 
         };
+
+         $scope.showSuccess = function(titleContent) {
+            var alertPopup = $ionicPopup.alert({
+                title: titleContent,
+                template: 'Merci pour votre participation '
+            });
+
+        };
+
+            $scope.showConfirm = function() {
+
+       ngDialog.open({
+            template: 'templates/popup/noGeo.html',
+            closeByDocument: false,
+            closeByEscape: false,
+            showClose: false,
+            className: 'ngdialog-theme-default custom-width',
+            scope: $scope
+        });
+
+   };
+
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
@@ -73,7 +95,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                         lat: parseFloat(flower.geometry.coordinates[1]),
                         id: flower._id,
                         icon: flowerIcon,
-                        //  message : "hello",
+
                         message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
                         getMessageScope: function() {
                             var scope = $scope.$new();
@@ -177,18 +199,6 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
 
 
-    $scope.showConfirm = function() {
-
-
-       ngDialog.open({
-            template: 'templates/popup/noGeo.html',
-            closeByDocument: false,
-            closeByEscape: false,
-            showClose: false,
-            scope: $scope
-        });
-
-   };
 
 
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "fplomb.685fc191";

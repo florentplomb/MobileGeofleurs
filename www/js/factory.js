@@ -3,7 +3,7 @@ underscore.factory('_', function() {
     return window._; // assumes underscore has already been loaded on the page
 });
 
-angular.module('starter.factory', ['ngCordova'])
+angular.module('starter.factory', ['ngCordova','starter.map','starter.services'])
 
 
 
@@ -47,7 +47,7 @@ angular.module('starter.factory', ['ngCordova'])
 })
 
 
-.factory("flowersService", function($http, apiUrl) {
+.factory("flowersService", function($http, apiUrl,AuthService) {
 
     var config = {
         headers: {
@@ -55,6 +55,30 @@ angular.module('starter.factory', ['ngCordova'])
         }
     };
     return {
+
+        postflower: function(callback,newFlower) {
+            $http({
+                method: "POST",
+                url: apiUrl + "/fleurs",
+                params: {
+                    access_token: AuthService.currentUser.token
+                },
+                headers: {
+                    "Content-type": "application/json"
+                },
+                data: {
+                    "flower": newFlower
+                }
+            }).success(function(data) {
+                callback(null, data);
+
+            }).error(function(err) {
+                callback(err);
+
+            });
+
+        },
+
         getflowers: function(callback) {
             $http.get(apiUrl + "/fleurs", config).success(function(data) {
                 callback(null, data);
@@ -72,9 +96,3 @@ angular.module('starter.factory', ['ngCordova'])
     };
 
 })
-
-
-
-
-
-

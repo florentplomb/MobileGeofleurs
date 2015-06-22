@@ -1,6 +1,7 @@
 var appDetails = angular.module('starter.details', ['starter.services','starter.factory']);
 
-appDetails.controller('DetailCtrl', function($scope, apiUrl, $stateParams, flowersService, $state) {
+appDetails.controller('DetailCtrl', function($scope, apiUrl,HardwareBackButtonManager, $stateParams, flowersService, $state) {
+
 
 
     var flowerId = $stateParams.flowerId;

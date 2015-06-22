@@ -61,13 +61,18 @@ text-align: center;
      border-radius: 0;
 }
 
+.ngdialog.ngdialog-theme-default.custom-width .ngdialog-content {
+
+    width: 60%;
+}
 .ngdialog.ngdialog-theme-default.margePop .ngdialog-content {
     margin-top: -100px;
+    width: 60%;
 }
 
 .ngdialog.ngdialog-theme-default.largePop .ngdialog-content {
    margin-top: -100px;
-    width: 60%;
+    width: 90%;
 }
 
 
