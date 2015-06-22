@@ -55,6 +55,10 @@ text-align: center;
     color: #ff0000;
 }
 
+.tab-nav .tabs{
+  visibility: hidden;
+
+}
 
 #body .ngdialog-content {
      padding: 0;

@@ -6,8 +6,6 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
         // The first name and last name will be automatically filled from the form thanks to AngularJS's two-way binding.
         $scope.user = {};
 
-        $scope.user.email = "flo@flo.com";
-        $scope.user.password = "1234";
 
     });
 
