@@ -1,0 +1,78 @@
+<div class="popup">
+    <div class="popup-head">
+        <h3 class="popup-title">Selectionner l'espèce observée !</h3>
+    </div>
+    <div class="popup-body">
+        <form name "espForm" ng-controller="PhotoCtrl">
+            <div>
+                <div style="text-align:left;">
+                    <angucomplete-alt template-url="template" id="ex1" input-changed="inputChanged" input-class="{{valideEsp}}" description-field="NOML" placeholder="( min. 3 lettres ) Nom commun ou latin"  selected-object="selectEsp" local-data="espNames" search-fields="NOMC,NOML" title-field="NOMC" minlength="3" match-class="highlight" />
+                </div>
+                <p ng-show="invEsp" style="color : red ; font-size: 12px; margin: 0px ,text-align:left;">*Veuillez séléctioner une espèce présente de la liste</p>
+                <h3> Espèce séléctionée  </h3>
+                <div id="selectedEsp" class="item">
+                    <div>
+                        <h6> Nom commmun: {{selectEsp.originalObject.NOMC}} </h6>
+                    </div>
+                    <div>
+                        <h6>Nom latin : {{selectEsp.originalObject.NOML}}</h6>
+                    </div>
+                    <div>
+                        <h6>Commune de la saisie : {{newCommune[0].properties.NAME}}  </h6>
+                    </div>
+                </div>
+            </div>
+            <div ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
+                <p ng-hide="afficherImg"> Afficher ma photo </p>
+                <p ng-hide="!afficherImg"> Cacher ma photo </p>
+            </div>
+            <img ng-hide="!afficherImg" src="{{UrlnewImg}}" width="100%" />
+        </form>
+    </div>
+    <div class="popup-buttons">
+        <button class="button  button-stable" ng-click="closeThisDialog(); resetflower(); ">
+           Annuler
+        </button>
+        <button class="button  button-positive" ng-click="closeThisDialog();  noIDontknowEsp();">
+            Publier
+        </button>
+    </div>
+</div>
+<script type="text/ng-template" id="template" ng-controller="PhotoCtrl">
+    <div class="angucomplete-holder" ng-class="{'angucomplete-dropdown-visible': showDropdown}">
+        <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input autofocus id="{{id}}_value" name={{inputName}} ng-class="{'angucomplete-input-not-empty': notEmpty}" ng-model="searchStr" ng-disabled="disableInput" type="{{type}}" placeholder="{{placeholder}}" maxlength="{{maxlength}}" ng-focus="onFocusHandler()" class="{{inputClass}}" ng-focus="resetHideResults()" ng-blur="hideResults($event)" autocapitalize="off" autocorrect="off" autocomplete="off" ng-change="inputChangeHandler(searchStr)" />
+        </label>
+        <div id="{{id}}_dropdown" class="angucomplete-dropdown" ng-show="showDropdown">
+            <div class="angucomplete-searching" ng-show="searching" ng-bind="textSearching"></div>
+            <div class="angucomplete-searching" ng-show="!searching && (!results || results.length == 0)" ng-bind="textNoResults"></div>
+            <div class="angucomplete-row" ng-repeat="result in results" ng-click="selectResult(result)" ng-mouseenter="hoverRow($index)" ng-class="{'angucomplete-selected-row': $index == currentIndex}">
+                <div ng-if="imageField" class="angucomplete-image-holder">
+                    <img ng-if="result.image && result.image != ''" ng-src="{{result.image}}" class="angucomplete-image" />
+                    <div ng-if="!result.image && result.image != ''" class="angucomplete-image-default"></div>
+                </div>
+                <div class="angucomplete-title" ng-if="matchClass" ng-bind-html="result.title"></div>
+                <div class="angucomplete-title" ng-if="!matchClass">{{ result.title }}</div>
+                <div ng-if="matchClass && result.description && result.description != ''" class="angucomplete-description" ng-bind-html="result.description"></div>
+                <div ng-if="!matchClass && result.description && result.description != ''" class="angucomplete-description">{{result.description}}</div>
+            </div>
+        </div>
+    </div>
+</script>
+<!-- <form class="form-inline">
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputEmail3">Email address</label>
+    <input type="email" class="form-control" id="exampleInputEmail3" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label class="sr-only" for="exampleInputPassword3">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword3" placeholder="Password">
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Remember me
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Sign in</button>
+</form> -->

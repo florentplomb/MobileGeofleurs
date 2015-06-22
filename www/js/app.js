@@ -5,7 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.factory', 'starter.services','starter.login','starter.map','starter.photo','starter.details','starter.register'])
+
+.constant('apiUrl', 'http://localhost:8100/api-proxy')
+//.constant('apiUrl', 'http://localhost:8100/local-proxy')
+//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 .run(function($ionicPlatform, $ionicPopup, $state,$ionicHistory) {
 
