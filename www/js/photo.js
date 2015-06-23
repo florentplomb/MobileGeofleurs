@@ -11,7 +11,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
 
             $rootScope.selEsp = $scope.selectEsp;
-              console.log($rootScope.selEsp);
+            console.log($rootScope.selEsp);
 
         })
     });
@@ -19,6 +19,8 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
     $scope.resetflower = function() {
 
         console.log("ResetFlower");
+
+        $scope.newCommune = [];
 
         $scope.newFlower = {
             type: "Feature",
@@ -62,7 +64,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
     }
 
-        $scope.yesIknowEsp = function() {
+    $scope.yesIknowEsp = function() {
 
 
         ngDialog.open({
@@ -81,18 +83,14 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
     $scope.publish = function(e) {
 
 
-        if ($scope.newCommune[0]._id) {
-            $scope.newFlower.properties.commune = $scope.newCommune[0]._id;
-        } else {
-            $scope.newFlower.properties.commune = null;
-        }
+
         if ($rootScope.selEsp) {
             $scope.newFlower.properties.espece = $rootScope.selEsp.originalObject.ISFS;
-        }else{
+        } else {
             $scope.newFlower.properties.espece = null;
         }
 
-
+        $scope.newFlower.properties.commune = $scope.newCommune[0]._id;
         $scope.newFlower.properties.image = $scope.newImgId;
 
         $ionicLoading.show({
@@ -105,6 +103,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 $scope.showAlert("Publication interompue. Veuillez réessayer");
                 $ionicLoading.hide();
                 $scope.resetflower();
+
 
             } else {
 
@@ -209,13 +208,36 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
     $scope.getPhoto = function() {
 
-        var lng = $scope.position.lng
-        var lat = $scope.position.lat
+      var lng = $scope.position.lng
+            var lat = $scope.position.lat
 
-        $scope.newFlower.geometry.coordinates = [];
-        $scope.newFlower.geometry.coordinates.push(lng);
-        $scope.newFlower.geometry.coordinates.push(lat);
+            $scope.newFlower.geometry.coordinates = [];
+            $scope.newFlower.geometry.coordinates.push(lng);
+            $scope.newFlower.geometry.coordinates.push(lat);
 
+
+        $http({
+            method: "POST",
+            url: apiUrl + "/communes/geoloc",
+            params: {
+                access_token: AuthService.currentUser.token
+            },
+            headers: {
+                "Content-type": "application/json"
+            },
+            data: {
+                "zone": $scope.newFlower
+            }
+        }).success(function(data) {
+            $scope.newCommune = data;
+
+
+        }).error(function(err) {
+        $scope.showAlert("commune introuvable");
+        $scope.newCommune[0]._id = null;
+            $ionicLoading.hide();
+
+        })
 
         CameraService.getPicture({
             quality: 75,
@@ -226,6 +248,8 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             encodingType: navigator.camera.EncodingType.JPEG,
             destinationType: navigator.camera.DestinationType.DATA_URL
         }).then(function(imageData) {
+
+
 
 
             $ionicLoading.show({
@@ -255,7 +279,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             }).error(function(err) {
                 $scope.resetflower();
                 $ionicLoading.hide();
-                 $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
+                $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
             });
 
         }, function(err) {
@@ -263,27 +287,6 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
         });
 
 
-        $http({
-            method: "POST",
-            url: apiUrl + "/communes/geoloc",
-            params: {
-                access_token: AuthService.currentUser.token
-            },
-            headers: {
-                "Content-type": "application/json"
-            },
-            data: {
-                "zone": $scope.newFlower
-            }
-        }).success(function(data) {
-            $scope.newCommune = data;
-            console.log($scope.newCommune);
-
-        }).error(function(err) {
-            $scope.newCommune = {};
-            $ionicLoading.hide();
-
-        })
 
     }
 

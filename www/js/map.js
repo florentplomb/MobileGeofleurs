@@ -38,42 +38,75 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
         });
     };
 
+    $scope.showAlert = function(titleContent) {
+        var alertPopup = $ionicPopup.alert({
+            title: titleContent,
+            template: 'Veuillez vérifier la connection'
+        });
+
+    };
+
+    $scope.showSuccess = function(titleContent) {
+        var alertPopup = $ionicPopup.alert({
+            title: 'Merci pour votre participation',
+            template: 'titleContent '
+        });
+
+    };
+
+    $scope.showConfirm = function() {
+
+        ngDialog.open({
+            template: 'templates/popup/noGeo.html',
+            closeByDocument: false,
+            closeByEscape: false,
+            showClose: false,
+            className: 'ngdialog-theme-default custom-width',
+            scope: $scope
+        });
+
+    };
+
+
     $scope.displayFlowers = function() {
+
+        //         function random(low, high) {
+        //     return Math.random() * (high - low) + low;
+        // }
+
+        // function randomInt(low, high) {
+        //     return Math.floor(Math.random() * (high - low) + low);
+        // }
+
+        // var minLat = 46.8256705653105;
+        // var maxLat = 46.8669985529976;
+        // var minLng = 6.59591674804687;
+        // var maxLng = 6.68003082275391;
+
+
+        // for (var i = 0; i < 80; i++) {
+
+        //     $scope.markers.push({
+        //         lng: random(minLng, maxLng),
+        //         lat: random(minLat, maxLat),
+        //         group: 'yverdon',
+        //         draggable: true,
+        //         message: '<div><p>Orchidaceae Neottia</p></div>'
+
+        //     });
+        // }
+
+
+
 
 
         $ionicLoading.show({
             template: "Chargement des publications",
             delay: 750
+
         });
 
-        $scope.showAlert = function(titleContent) {
-            var alertPopup = $ionicPopup.alert({
-                title: titleContent,
-                template: 'Veuillez vérifier la connection'
-            });
-
-        };
-
-        $scope.showSuccess = function(titleContent) {
-            var alertPopup = $ionicPopup.alert({
-                title: 'Merci pour votre participation',
-                template: 'titleContent '
-            });
-
-        };
-
-        $scope.showConfirm = function() {
-
-            ngDialog.open({
-                template: 'templates/popup/noGeo.html',
-                closeByDocument: false,
-                closeByEscape: false,
-                showClose: false,
-                className: 'ngdialog-theme-default custom-width',
-                scope: $scope
-            });
-
-        };
+      $scope.markers = [];
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
@@ -94,7 +127,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                         lat: parseFloat(flower.geometry.coordinates[1]),
                         id: flower._id,
                         icon: flowerIcon,
-                        group:'yverdon',
+                        group: 'yverdon',
                         message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
                         getMessageScope: function() {
                             var scope = $scope.$new();
