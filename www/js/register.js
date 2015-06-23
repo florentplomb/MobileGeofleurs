@@ -48,7 +48,7 @@ appRegister.controller('RegisterCtrl', function($scope, AuthService, $ionicHisto
             });
 
             // Go to the issue creation tab.
-            $state.go('tab.dash');
+            $state.go('map');
 
         }).error(function(user) {
 

@@ -7,11 +7,11 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.factory', 'starter.services','starter.login','starter.map','starter.photo','starter.details','starter.register'])
 
-//.constant('apiUrl', 'http://localhost:8100/api-proxy')
+.constant('apiUrl', 'http://localhost:8100/api-proxy')
 //.constant('apiUrl', 'http://localhost:8100/local-proxy')
-.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
-.run(function($ionicPlatform, $ionicPopup, $state,$ionicHistory) {
+.run(function($ionicPlatform, $ionicPopup, $rootScope, $state,$ionicHistory) {
 
 
     $ionicPlatform.ready(function() {
@@ -42,13 +42,22 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
         }
       }
+
+
     });
 
 
 
+})
 
-  (function(AuthService, $rootScope, $state) {
+ .run(function(AuthService, $rootScope, $state,$location) {
     $rootScope.$on('$stateChangeStart', function(event, toState) {
+
+
+        if (AuthService.currentUser != null) {
+                $location.path('map');
+            }
+
       // If the user is not logged in and is trying to access another state than "login"...
       if (!AuthService.currentUser && toState.name !== 'login' && toState.name !== 'register') {
         console.log('Activating login');
@@ -60,9 +69,10 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
 
 
+
     });
   })
-})
+
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -85,36 +95,38 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  // .state('tab.dash', {
+  //   url: '/dash',
 
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
+  //   views: {
+  //     'tab-dash': {
+  //       templateUrl: 'templates/tab-dash.html',
 
-      }
-    }
+  //     }
+  //   }
+  // })
+
+  // .state('tab.flowerDetails', {
+  //   // We use a parameterized route for this state.
+  //   // That way we'll know which issue to display the details of.
+  //   url: '/flowerDetails/:flowerId',
+
+  //   views: {
+  //     'tab-dash': {
+  //       templateUrl: 'templates/issueDetails.html'
+
+  //     }
+
+  //   }
+  //   // Here we use the same "tab-issueList" view as the previous state.
+  //   // This means that the issue details template will be displayed in the same tab as the issue list.
+
+  // })
+
+    .state('map', {
+    url: '/map',
+    templateUrl: 'templates/tab-dash.html'
   })
-
-  .state('tab.flowerDetails', {
-    // We use a parameterized route for this state.
-    // That way we'll know which issue to display the details of.
-    url: '/flowerDetails/:flowerId',
-
-    views: {
-      'tab-dash': {
-        templateUrl: 'templates/issueDetails.html'
-
-      }
-
-    }
-    // Here we use the same "tab-issueList" view as the previous state.
-    // This means that the issue details template will be displayed in the same tab as the issue list.
-
-  })
-
-
-
 
 
   .state('login', {
@@ -133,7 +145,7 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise(function($injector) {
-    $injector.get('$state').go('tab.dash');
+    $injector.get('$state').go('map');
   });
 
 

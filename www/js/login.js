@@ -54,7 +54,7 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
             });
 
             // Go to the issue creation tab.
-            $state.go('tab.dash');
+            $state.go('map');
 
         }).error(function() {
 

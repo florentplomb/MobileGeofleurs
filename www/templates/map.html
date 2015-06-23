@@ -1,4 +1,4 @@
-<ion-view hide-tab-nav="true" view-title="Dashboard" ng-controller="MapCtrl">
+<ion-view  view-title="Dashboard" ng-controller="MapCtrl">
   <ion-nav-buttons side="primary">
 
   <div><i id="author" class="icon ion-person iconsize"></i> {{currentUser.pseudo}}</div>
@@ -7,7 +7,7 @@
     <ion-nav-buttons side="secondary">
         <button type="button" ng-controller="LogoutCtrl" ng-click="logOut(); stopGeo();" class="button"><i class="icon ion-power"></i></button>
     </ion-nav-buttons>
-    <ion-content scroll='false'>
+    <ion-content class="padding" scroll="false">
         <div id="map">
             <leaflet data-tap-disabled="true" defaults="defaults" markers="markers" center="center" maxbounds="maxbounds" height="100%"></leaflet>
         </div>
