@@ -1,27 +1,30 @@
-<ion-view view-title="Issue Details" ng-controller="DetailCtrl" >
+<ion-view view-title="Details" ng-controller="DetailCtrl" >
 
   </ion-nav-buttons>
           <ion-content>
 
           <div class="list card">
 
-  <div class="item item-avatar center">
+  <div class="item item-avatar center indent">
+
+<div id="detailFleurs">
+    <p ng-hide="flower.properties.espece" ><img src='img/flower2.png' alt='Flower'  width='25' height='25'/>Espèce : ce champ n'a pas été saisi</p>
 
 
-    <h2>{{flower.properties.espece.NOMC}}</h2>
-    <p>{{flower.properties.espece.NOML}}</p>
-    <p><i id="author" class="icon  ion-ios-location"></i> {{flower.properties.commune.properties.NAME}}</p>
+    <h2 style="text-indent:-20px;"><img  ng-show="flower.properties.espece" src='img/flower2.png' alt='Flower'  width='25' height='25'/>{{flower.properties.espece.NOMC}}</h2>
+    <p style="font-style: italic;">{{flower.properties.espece.NOML}}</p>
+</div>
+
+
+    <p><i id="author" style="color: blue;" class="icon  ion-ios-location"></i> {{flower.properties.commune.properties.NAME}}</p>
     <p><i id="author" class="icon ion-person iconsize balanced"></i> {{flower.properties.user.pseudo}}</p>
+  <p>{{flower.properties.createdOn | date:'medium'}}</p>
   </div>
 
   <div class="item item-image">
-    <img src="{{urlImg+flower.properties.image}}">
+    <img src="{{urlImg+flower.properties.image}}" width='80%'>
   </div>
 
-  <a class="item item-icon-left assertive" href="#">
-    <i class="icon ion-music-note"></i>
-    Start listening
-  </a>
 
 </div>
     <!--         <div class="list card">

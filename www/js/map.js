@@ -1,4 +1,4 @@
-var appMap = angular.module('starter.map', ['starter.services','starter.factory','leaflet-directive', 'ngCordova', 'ngDialog', 'angucomplete-alt']);
+var appMap = angular.module('starter.map', ['starter.services', 'starter.factory', 'leaflet-directive', 'ngCordova', 'ngDialog', 'angucomplete-alt']);
 
 
 appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, HardwareBackButtonManager, $ionicHistory, $ionicLoading, AuthService, $ionicPopup, $state, apiUrl, $rootScope, flowersService, $cordovaGeolocation, leafletData, $ionicPopup, $log, $timeout, EspService) {
@@ -33,7 +33,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     $scope.goDetail = function(flowerId) {
         console.log(flowerId);
 
-        $state.go("tab.flowerDetails", {
+        $state.go("details", {
             flowerId: flowerId
         });
     };
@@ -54,27 +54,26 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
         };
 
-         $scope.showSuccess = function(titleContent) {
+        $scope.showSuccess = function(titleContent) {
             var alertPopup = $ionicPopup.alert({
-                title: titleContent,
-                template: 'Merci pour votre participation '
+                title: 'Merci pour votre participation',
+                template: 'titleContent '
             });
 
         };
 
-            $scope.showConfirm = function() {
+        $scope.showConfirm = function() {
 
-       ngDialog.open({
-            template: 'templates/popup/noGeo.html',
-            closeByDocument: false,
-            closeByEscape: false,
-            showClose: false,
-            className: 'ngdialog-theme-default custom-width',
-            scope: $scope
-        });
+            ngDialog.open({
+                template: 'templates/popup/noGeo.html',
+                closeByDocument: false,
+                closeByEscape: false,
+                showClose: false,
+                className: 'ngdialog-theme-default custom-width',
+                scope: $scope
+            });
 
-   };
-
+        };
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
@@ -95,7 +94,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                         lat: parseFloat(flower.geometry.coordinates[1]),
                         id: flower._id,
                         icon: flowerIcon,
-
+                        group:'yverdon',
                         message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
                         getMessageScope: function() {
                             var scope = $scope.$new();
@@ -196,8 +195,6 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
         });
 
     })
-
-
 
 
 

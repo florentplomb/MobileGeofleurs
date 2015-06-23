@@ -1,7 +1,8 @@
-<ion-view  view-title="Dashboard" ng-controller="MapCtrl">
-  <ion-nav-buttons side="primary">
+<ion-view   ng-controller="MapCtrl">
+  <ion-nav-buttons>
 
-  <div><i id="author" class="icon ion-person iconsize"></i> {{currentUser.pseudo}}</div>
+  <div><i id="author" class="icon ion-person iconsize"></i> {{currentUser.pseudo}}
+    <p style="font-style: italic; font-size:10px;"> {{currentUser.email}}</p></div>
 
     </ion-nav-buttons>
     <ion-nav-buttons side="secondary">
@@ -25,7 +26,7 @@
         </div>
         <div ng-controller="PhotoCtrl" id="newFleurs" ng-show="geolocOn" ng-click="getPhoto()" class="buttonMap">
             <button id="b1map" class="button button-full button-calm">
-                Ajouter une nouvelle fleur <i class="ion-plus-circled"> </i>
+                <img  align="-10px" src='img/flowerblanc.png' alt='-'  width='25' height='25'/>Ajouter une nouvelle fleur<img   src='img/flowerblanc.png' alt='-'  width='25' height='25'/>
             </button>
         </div>
     </ion-content>

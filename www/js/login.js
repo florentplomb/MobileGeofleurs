@@ -48,9 +48,10 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
 
             // Set the next view as the root of the history.
             // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
+
             $ionicHistory.nextViewOptions({
                 disableBack: true,
-                historyRoot: true
+                 historyRoot: true
             });
 
             // Go to the issue creation tab.
@@ -75,8 +76,13 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
     }
 });
 
-appLogin.controller('LogoutCtrl', function(AuthService, $rootScope, $scope, $state) {
+appLogin.controller('LogoutCtrl', function($ionicHistory,AuthService, $rootScope, $scope, $state) {
     $scope.logOut = function() {
+
+          $ionicHistory.nextViewOptions({
+                disableBack: true,
+                 historyRoot: true
+            });
         AuthService.unsetUser();
         $rootScope.currentUser = null;
         console.log('logout');

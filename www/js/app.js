@@ -7,9 +7,9 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.factory', 'starter.services','starter.login','starter.map','starter.photo','starter.details','starter.register'])
 
-.constant('apiUrl', 'http://localhost:8100/api-proxy')
+//.constant('apiUrl', 'http://localhost:8100/api-proxy')
 //.constant('apiUrl', 'http://localhost:8100/local-proxy')
-//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 .run(function($ionicPlatform, $ionicPopup, $rootScope, $state,$ionicHistory) {
 
@@ -106,26 +106,19 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
   //   }
   // })
 
-  // .state('tab.flowerDetails', {
-  //   // We use a parameterized route for this state.
-  //   // That way we'll know which issue to display the details of.
-  //   url: '/flowerDetails/:flowerId',
+  .state('details', {
+    // We use a parameterized route for this state.
+    // That way we'll know which issue to display the details of.
+    url: '/flowerDetails/:flowerId',
+    templateUrl: 'templates/issueDetails.html'
 
-  //   views: {
-  //     'tab-dash': {
-  //       templateUrl: 'templates/issueDetails.html'
+  })
 
-  //     }
 
-  //   }
-  //   // Here we use the same "tab-issueList" view as the previous state.
-  //   // This means that the issue details template will be displayed in the same tab as the issue list.
-
-  // })
 
     .state('map', {
     url: '/map',
-    templateUrl: 'templates/tab-dash.html'
+    templateUrl: 'templates/map.html'
   })
 
 

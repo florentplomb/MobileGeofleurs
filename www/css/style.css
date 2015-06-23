@@ -4,6 +4,17 @@ html, body {
   width: 100%;
 }
 
+.indent{
+  padding-left: 0px;
+}
+
+#detailFleurs{
+  margin-bottom: 4px;
+}
+
+.padding {
+    padding: 0px;
+}
 
 #selectedEsp{
 
