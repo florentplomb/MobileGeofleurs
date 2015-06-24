@@ -4,19 +4,19 @@
       <div class="list">
           <label class="item item-input item-stacked-label">
             <span class="input-label">Email</span>
-              <input type="text" placeholder="john@suhr.com" ng-model="user.email">
+              <input type="email" placeholder="john@suhr.com" required ng-model="user.email">
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Pseudo</span>
-              <input type="text" placeholder="suhr98" ng-model="user.pseudo">
+              <input type="text" placeholder="suhr98" required ng-model="user.pseudo">
           </label>
           <label class="item item-input item-stacked-label">
             <span class="input-label">Password</span>
-              <input type="password" placeholder="Password" ng-model="user.password">
+              <input type="password" placeholder="Password" required ng-model="user.password">
           </label>
       </div>
 
-    <button id="buttonLogin" ng-click="register()" class="button buttonLogin button-block button-assertive">
+    <button id="buttonLogin" ng-click="register()"  ng-disabled="registerForm.$invalid" class="button buttonLogin button-block button-assertive">
         Inscription
     </button>
 </form>

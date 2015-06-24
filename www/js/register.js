@@ -44,19 +44,19 @@ appRegister.controller('RegisterCtrl', function($scope, AuthService, $ionicHisto
             // Otherwise, the next screen will have a "back" arrow pointing back to the login screen.
             $ionicHistory.nextViewOptions({
                 disableBack: true,
-                historyRoot: true
+                historyRoot: false
             });
 
             // Go to the issue creation tab.
             $state.go('map');
 
-        }).error(function(user) {
+        }).error(function(err) {
 
-            console.log("eroor");
 
+            alert('Email incorrect ou déjà utilisé');
             // If an error occurs, hide the loading message and show an error message.
             $ionicLoading.hide();
-            $scope.error = 'Could not log in.';
+
         });
 
 

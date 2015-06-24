@@ -49,7 +49,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     $scope.showSuccess = function(titleContent) {
         var alertPopup = $ionicPopup.alert({
             title: 'Merci pour votre participation',
-            template: 'titleContent '
+            template: titleContent
         });
 
     };
