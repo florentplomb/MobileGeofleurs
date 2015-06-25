@@ -9,6 +9,10 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
 
     });
 
+  //   Platform.ready(function() {
+  //   // Hide the status bar
+  //   StatusBar.hide();
+  // });
 
     $scope.goRegister = function() {
 

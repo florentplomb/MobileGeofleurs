@@ -7,9 +7,9 @@
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'starter.factory', 'starter.services','starter.login','starter.map','starter.photo','starter.details','starter.register'])
 
-.constant('apiUrl', 'http://localhost:8100/api-proxy')
+//.constant('apiUrl', 'http://localhost:8100/api-proxy')
 //.constant('apiUrl', 'http://localhost:8100/local-proxy')
-//.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
+.constant('apiUrl', 'http://geofleurs.herokuapp.com/api')
 
 .run(function($ionicPlatform, $ionicPopup, $rootScope, $state,$ionicHistory) {
 
