@@ -50,11 +50,11 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     });
 
     $scope.goDetail = function(flowerId) {
-        console.log(flowerId);
+        console.log("sad");
 
         $state.go("details", {
             flowerId: flowerId
-        });
+        })
     };
 
     $scope.showAlert = function(titleContent) {
@@ -99,10 +99,10 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
             return Math.floor(Math.random() * (high - low) + low);
         }
 
-        var minLat = 46.8256705653105;
+        var minLat = 45.8256705653105;
         var maxLat = 46.8669985529976;
-        var minLng = 6.59591674804687;
-        var maxLng = 6.68003082275391;
+        var minLng = 6.29591674804687;
+        var maxLng = 6.78003082275391;
 
 
         for (var i = 0; i < 200; i++) {
@@ -111,9 +111,35 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                 lng: random(minLng, maxLng),
                 lat: random(minLat, maxLat),
                 icon:flowers[randomInt(0, flowers.length)],
-                message: '<p><img src="img/flower8.png" width="20px"/>Orchidée moucheron</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
+                message: '<p ng-click="goDetail()"><img src="img/flower8.png" width="20px"/>Orchidée moucheron</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
                 group: 'yverdon',
-                draggable: true
+                draggable: true,
+                 getMessageScope: function() {
+                            var scope = $scope.$new();
+
+                            return scope;
+                        }
+
+
+            });
+        }
+
+
+
+        for (var i = 0; i < 200; i++) {
+
+            $scope.markers.push({
+                lng: random(minLng, maxLng),
+                lat: random(minLat, maxLat),
+                icon:flowers[randomInt(0, flowers.length)],
+                message: '<p ng-click="goDetail()"><img src="img/flower8.png" width="20px"/>Orchidée moucheron</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
+                group: 'yverdon',
+                draggable: true,
+                 getMessageScope: function() {
+                            var scope = $scope.$new();
+
+                            return scope;
+                        }
 
 
             });
@@ -145,20 +171,20 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
                     $scope.urlImgID = apiUrl + "/images/";
 
-                    // $scope.markers.push({
-                    //     lng: parseFloat(flower.geometry.coordinates[0]),
-                    //     lat: parseFloat(flower.geometry.coordinates[1]),
-                    //     id: flower._id,
-                    //     // icon: flowerIcon,
-                    //     group: 'yverdon',
-                    //     message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
-                    //     getMessageScope: function() {
-                    //         var scope = $scope.$new();
-                    //         scope.flower = flower;
-                    //         return scope;
-                    //     }
+                    $scope.markers.push({
+                        lng: parseFloat(flower.geometry.coordinates[0]),
+                        lat: parseFloat(flower.geometry.coordinates[1]),
+                        id: flower._id,
+                        // icon: flowerIcon,
+                        group: 'yverdon',
+                        message: '<div ng-click="goDetail()"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                        getMessageScope: function() {
+                            var scope = $scope.$new();
+                            scope.flower = flower;
+                            return scope;
+                        }
 
-                    // });
+                    });
 
                 })
                 $ionicLoading.hide()
