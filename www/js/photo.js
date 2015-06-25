@@ -200,15 +200,15 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
         })
 
-        CameraService.getPicture({
-            quality: 75,
-            targetWidth: 400,
-            targetHeight: 600,
-            saveToPhotoAlbum: false,
-            correctOrientation: true,
-            encodingType: navigator.camera.EncodingType.JPEG,
-            destinationType: navigator.camera.DestinationType.DATA_URL
-        }).then(function(imageData) {
+        // CameraService.getPicture({
+        //     quality: 75,
+        //     targetWidth: 400,
+        //     targetHeight: 600,
+        //     saveToPhotoAlbum: false,
+        //     correctOrientation: true,
+        //     encodingType: navigator.camera.EncodingType.JPEG,
+        //     destinationType: navigator.camera.DestinationType.DATA_URL
+        // }).then(function(imageData) {
 
         $ionicLoading.show({
             template: "Chargement de l'image...",
@@ -225,7 +225,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 "Content-type": "application/json"
             },
             data: {
-                "imageB64": imageData
+                "imageB64": "t"
             }
         }).success(function(idImg) {
 
@@ -240,9 +240,9 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
         });
 
-          }, function(err) {
+        //   }, function(err) {
 
-        });
+        // });
 
 
     }

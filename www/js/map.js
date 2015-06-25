@@ -12,7 +12,24 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     $scope.valideEsp = "";
 
 
-    var flowerIcon = {
+    var f2 = {
+
+        iconUrl: 'img/pink.png',
+        iconSize: [28, 40],
+        shadowSize: [50, 64],
+        //iconAnchor: [22, 94],
+
+    };
+
+    var f3 = {
+
+        iconUrl: 'img/fgreen.png',
+        iconSize: [28, 40],
+        shadowSize: [50, 64],
+        //iconAnchor: [22, 94],
+
+    };
+    var f1 = {
 
         iconUrl: 'img/fIcon2.png',
         iconSize: [28, 40],
@@ -20,6 +37,8 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
         //iconAnchor: [22, 94],
 
     };
+
+    var flowers = [f1,f2,f3 ]
 
     EspService.getEspName(function(err, data) {
         if (err) {
@@ -70,31 +89,35 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
     $scope.displayFlowers = function() {
 
-        //         function random(low, high) {
-        //     return Math.random() * (high - low) + low;
-        // }
+           $scope.markers = [];
 
-        // function randomInt(low, high) {
-        //     return Math.floor(Math.random() * (high - low) + low);
-        // }
+                function random(low, high) {
+            return Math.random() * (high - low) + low;
+        }
 
-        // var minLat = 46.8256705653105;
-        // var maxLat = 46.8669985529976;
-        // var minLng = 6.59591674804687;
-        // var maxLng = 6.68003082275391;
+        function randomInt(low, high) {
+            return Math.floor(Math.random() * (high - low) + low);
+        }
+
+        var minLat = 46.8256705653105;
+        var maxLat = 46.8669985529976;
+        var minLng = 6.59591674804687;
+        var maxLng = 6.68003082275391;
 
 
-        // for (var i = 0; i < 80; i++) {
+        for (var i = 0; i < 200; i++) {
 
-        //     $scope.markers.push({
-        //         lng: random(minLng, maxLng),
-        //         lat: random(minLat, maxLat),
-        //         group: 'yverdon',
-        //         draggable: true,
-        //         message: '<div><p>Orchidaceae Neottia</p></div>'
+            $scope.markers.push({
+                lng: random(minLng, maxLng),
+                lat: random(minLat, maxLat),
+                icon:flowers[randomInt(0, flowers.length)],
+                message: '<p><img src="img/flower8.png" width="20px"/>Orchidée moucheron</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
+                group: 'yverdon',
+                draggable: true
 
-        //     });
-        // }
+
+            });
+        }
 
 
 
@@ -106,7 +129,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
         });
 
-      $scope.markers = [];
+
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
@@ -122,20 +145,20 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
                     $scope.urlImgID = apiUrl + "/images/";
 
-                    $scope.markers.push({
-                        lng: parseFloat(flower.geometry.coordinates[0]),
-                        lat: parseFloat(flower.geometry.coordinates[1]),
-                        id: flower._id,
-                        icon: flowerIcon,
-                        group: 'yverdon',
-                        message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
-                        getMessageScope: function() {
-                            var scope = $scope.$new();
-                            scope.flower = flower;
-                            return scope;
-                        }
+                    // $scope.markers.push({
+                    //     lng: parseFloat(flower.geometry.coordinates[0]),
+                    //     lat: parseFloat(flower.geometry.coordinates[1]),
+                    //     id: flower._id,
+                    //     // icon: flowerIcon,
+                    //     group: 'yverdon',
+                    //     message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                    //     getMessageScope: function() {
+                    //         var scope = $scope.$new();
+                    //         scope.flower = flower;
+                    //         return scope;
+                    //     }
 
-                    });
+                    // });
 
                 })
                 $ionicLoading.hide()
@@ -229,6 +252,35 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
     })
 
+
+      $scope.layers = {
+      baselayers: {
+        osm: {
+          name: 'OpenStreetMap',
+          url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          type: 'xyz'
+        },
+        mapbox_light: {
+          name: 'Frontières communales',
+          url: mapboxTileLayer,
+          type: 'xyz',
+          layerOptions: {
+            apikey: 'pk.eyJ1IjoiYnVmYW51dm9scyIsImEiOiJLSURpX0pnIn0.2_9NrLz1U9bpwMQBhVk97Q',
+            mapid: 'fplomb.685fc191'
+          }
+        },
+        googleSatellite: {
+          name: 'Google Satellite',
+          layerType: 'SATELLITE',
+          type: 'google'
+        },
+        googleRoadmap: {
+          name: 'Google Streets',
+          layerType: 'ROADMAP',
+          type: 'google'
+        },
+      }
+    }
 
 
     var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "fplomb.685fc191";

@@ -16,6 +16,13 @@ html, body {
     padding: 0px;
 }
 
+.leaflet-popup-content {
+    line-height: 1.4;
+    margin: 5px 10px;
+}
+.leaflet-popup-content p {
+    margin-top: 3px ;
+}
 #selectedEsp{
 
 background-color: #fff;
