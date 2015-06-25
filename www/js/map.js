@@ -230,11 +230,36 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     })
 
 
+      $scope.layers = {
+      baselayers: {
+        osm: {
+          name: 'OpenStreetMap',
+          url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          type: 'xyz'
+        },
+        mapbox_frontier: {
+          name: 'Frontières communales',
+          url: "http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}",
+          type: 'xyz',
+          layerOptions: {
+            apikey: 'pk.eyJ1IjoiYnVmYW51dm9scyIsImEiOiJLSURpX0pnIn0.2_9NrLz1U9bpwMQBhVk97Q',
+            mapid: 'fplomb.685fc191'
+          }
+        },
+        googleSatellite: {
+          name: 'Google Satellite',
+          layerType: 'SATELLITE',
+          type: 'google'
+        },
+        googleRoadmap: {
+          name: 'Google Streets',
+          layerType: 'ROADMAP',
+          type: 'google'
+        }
+       }
+    }
 
-    var mapboxTileLayer = "http://api.tiles.mapbox.com/v4/" + "fplomb.685fc191";
-    mapboxTileLayer = mapboxTileLayer + "/{z}/{x}/{y}.png?access_token=" + "pk.eyJ1IjoiZnBsb21iIiwiYSI6ImJwRUF2ZlkifQ.OIuXY-qgnEBzcnYwXg8imw";
-    $scope.defaults = {
-        tileLayer: mapboxTileLayer
-    };
+
+
 
 })
