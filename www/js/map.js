@@ -128,7 +128,8 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                         id: flower._id,
                         icon: flowerIcon,
                         group: 'yverdon',
-                        message: '<div ng-click="goDetail(flower._id)"><p>{{}}</p><img src="{{urlImgID+flower.properties.image}}" width="100px" /><a style="display:block;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+     message: '<div ng-click="goDetail(flower._id)"><img style="float: left;" src="img/flower8.png" width="20px"/> <p>{{flower.properties.espece.NOMC}} <p style="font-style:italic; line-height: 24px;" ng-hide="flower.properties.espece.NOMC"> Indéfinie </p>  </p><img align="center" src="{{urlImgID+flower.properties.image}}" style="margin-top: -12px;" width="90px"/><a style="display:block; text-align:center;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+
                         getMessageScope: function() {
                             var scope = $scope.$new();
                             scope.flower = flower;

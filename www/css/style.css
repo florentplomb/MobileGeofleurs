@@ -12,6 +12,22 @@ html, body {
   margin-bottom: 4px;
 }
 
+.leaflet-popup-content {
+    width: 100px;
+    line-height: 1.4;
+    margin: 5px 10px;
+    text-align: center;
+}
+.leaflet-popup-content p {
+  text-align: left;
+    margin-top: 3px ;
+}
+
+.iconEsp .leaflet-popup-content  img   {
+float: left;
+}
+
+
 .padding {
     padding: 0px;
 }

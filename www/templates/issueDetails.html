@@ -18,10 +18,10 @@
 
     <p><i id="author" style="color: blue;" class="icon  ion-ios-location"></i> {{flower.properties.commune.properties.NAME}}</p>
     <p><i id="author" class="icon ion-person iconsize balanced"></i> {{flower.properties.user.pseudo}}</p>
-  <p>{{flower.properties.createdOn | date:'medium'}}</p>
+  <p>{{flower.properties.createdOn | date:'fullDate'}}</p>
   </div>
 
-  <div class="item item-image">
+  <div class="item center">
     <img src="{{urlImg+flower.properties.image}}" width='80%'>
   </div>
 
