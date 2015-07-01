@@ -124,7 +124,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
         $scope.newFlower.geometry.coordinates.push(lat);
 
 
-       console.log($scope.newFlower);
+        console.log($scope.newFlower);
 
 
         $ionicLoading.show({
@@ -155,10 +155,9 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
     $scope.getPhoto = function() {
 
-           $scope.newZone = {
-              type: "Feature",
-            properties: {
-            },
+        $scope.newZone = {
+            type: "Feature",
+            properties: {},
             geometry: {
                 type: "Point",
                 coordinates: []
@@ -170,7 +169,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
         lng = $scope.position.lng
         lat = $scope.position.lat
 
-         $scope.newZone.geometry.coordinates.push(lng);
+        $scope.newZone.geometry.coordinates.push(lng);
         $scope.newZone.geometry.coordinates.push(lat);
 
 
@@ -200,49 +199,51 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
         })
 
-        // CameraService.getPicture({
-        //     quality: 75,
-        //     targetWidth: 400,
-        //     targetHeight: 600,
-        //     saveToPhotoAlbum: false,
-        //     correctOrientation: true,
-        //     encodingType: navigator.camera.EncodingType.JPEG,
-        //     destinationType: navigator.camera.DestinationType.DATA_URL
-        // }).then(function(imageData) {
+        CameraService.getPicture({
+            quality: 100,
+            targetWidth: 800,
+            targetHeight: 1200,
+            saveToPhotoAlbum: false,
+            correctOrientation: true,
+            encodingType: navigator.camera.EncodingType.JPEG,
+            destinationType: navigator.camera.DestinationType.DATA_URL,
+            allowEdit:true,
 
-        $ionicLoading.show({
-            template: "Chargement de l'image...",
-            delay: 750
+        }).then(function(imageData) {
+
+            $ionicLoading.show({
+                template: "Chargement de l'image...",
+                delay: 750
+            });
+
+            $http({
+                method: "POST",
+                url: apiUrl + "/images",
+                params: {
+                    access_token: AuthService.currentUser.token
+                },
+                headers: {
+                    "Content-type": "application/json"
+                },
+                data: {
+                    "imageB64": "t"
+                }
+            }).success(function(idImg) {
+
+                $ionicLoading.hide();
+                $rootScope.UrlnewImg = apiUrl + "/images/" + idImg;
+                $scope.newImgId = idImg;
+                $scope.ifKnowName();
+
+            }).error(function(err) {
+                // $scope.resetflower();
+                $ionicLoading.hide();
+                $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
+            });
+
+        }, function(err) {
+
         });
-
-        $http({
-            method: "POST",
-            url: apiUrl + "/images",
-            params: {
-                access_token: AuthService.currentUser.token
-            },
-            headers: {
-                "Content-type": "application/json"
-            },
-            data: {
-                "imageB64": "t"
-            }
-        }).success(function(idImg) {
-
-            $ionicLoading.hide();
-            $rootScope.UrlnewImg = apiUrl + "/images/" + idImg;
-            $scope.newImgId = idImg;
-            $scope.ifKnowName();
-
-        }).error(function(err) {
-            // $scope.resetflower();
-            $ionicLoading.hide();
-            $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
-        });
-
-        //   }, function(err) {
-
-        // });
 
 
     }
