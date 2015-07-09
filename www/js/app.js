@@ -59,15 +59,13 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
             }
 
       // If the user is not logged in and is trying to access another state than "login"...
-      if (!AuthService.currentUser && toState.name !== 'login' && toState.name !== 'register') {
-        console.log('Activating login');
+        // if (!AuthService.currentUser && toState.name !== 'login' && toState.name !== 'register') {
+        //   console.log('Activating login');
 
         // ... then cancel the transition and go to the "login" state instead.
-        event.preventDefault();
-        $state.go('login');
-      }
-
-
+      //   event.preventDefault();
+      //   $state.go('login');
+      // }
 
 
     });
@@ -114,6 +112,14 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
   })
 
+   .state('listFlowers', {
+    // We use a parameterized route for this state.
+    // That way we'll know which issue to display the details of.
+    url: '/listFlowers',
+    templateUrl: 'templates/listFlowers.html'
+
+  })
+
 
 
     .state('map', {
@@ -138,7 +144,7 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise(function($injector) {
-    $injector.get('$state').go('map');
+    $injector.get('$state').go('listFlowers');
   });
 
 
