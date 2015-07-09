@@ -201,13 +201,14 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
         })
 
         CameraService.getPicture({
-            quality: 75,
-            targetWidth: 400,
-            targetHeight: 600,
+            quality: 100,
+            targetWidth: 800,
+            targetHeight: 1200,
             saveToPhotoAlbum: false,
             correctOrientation: true,
             encodingType: navigator.camera.EncodingType.JPEG,
-            destinationType: navigator.camera.DestinationType.DATA_URL
+            destinationType: navigator.camera.DestinationType.DATA_URL,
+            allowEdit:true,
         }).then(function(imageData) {
 
         $ionicLoading.show({
