@@ -26,6 +26,9 @@ html, body {
 .iconEsp .leaflet-popup-content  img   {
 float: left;
 }
+.sel {
+  background-color: #ffffff;
+}
 
 
 .padding {
@@ -59,7 +62,6 @@ height: 95%;
 
 
 }
-
 
 .popup-body {
 text-align: center;

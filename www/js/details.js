@@ -2,8 +2,6 @@ var appDetails = angular.module('starter.details', ['starter.services','starter.
 
 appDetails.controller('DetailCtrl', function($scope, apiUrl,HardwareBackButtonManager, $stateParams, flowersService, $state) {
 
-
-
     var flowerId = $stateParams.flowerId;
 
     $scope.urlImg = apiUrl + "/images/"
@@ -12,7 +10,6 @@ appDetails.controller('DetailCtrl', function($scope, apiUrl,HardwareBackButtonMa
             $scope.error = err;
             $scope.showAlert("Publication indisponible");
         }
-
         $scope.flower = flower;
 
     }, flowerId);
