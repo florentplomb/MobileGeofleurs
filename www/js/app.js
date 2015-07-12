@@ -55,7 +55,7 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
 
 
         if (AuthService.currentUser != null) {
-                $location.path('map');
+                $location.path('listFlowers');
             }
 
       // If the user is not logged in and is trying to access another state than "login"...
