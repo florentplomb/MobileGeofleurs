@@ -144,7 +144,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 $ionicLoading.hide();
                 // $scope.resetflower();
                 $scope.displayFlowers();
-                $scope.showSuccess("Votre saisie est maintenan dispnobile sur la carte");
+                $scope.showSuccess("Votre saisie est maintenant dispnobile sur la carte");
             };
         }, $scope.newFlower)
 
@@ -194,27 +194,27 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             commune = data;
 
         }).error(function(err) {
-            $scope.showAlert("commune introuvable");
+            $scope.showAlert("Commune introuvable");
             $scope.newCommune[0]._id = null;
             $ionicLoading.hide();
 
         })
 
-        CameraService.getPicture({
-            quality: 100,
-            targetWidth: 800,
-            targetHeight: 1200,
-            saveToPhotoAlbum: false,
-            correctOrientation: true,
-            encodingType: navigator.camera.EncodingType.JPEG,
-            destinationType: navigator.camera.DestinationType.DATA_URL,
-            allowEdit:true,
-        }).then(function(imageData) {
+        // CameraService.getPicture({
+        //     quality: 100,
+        //     targetWidth: 800,
+        //     targetHeight: 1200,
+        //     saveToPhotoAlbum: false,
+        //     correctOrientation: true,
+        //     encodingType: navigator.camera.EncodingType.JPEG,
+        //     destinationType: navigator.camera.DestinationType.DATA_URL,
+        //     allowEdit:true,
+        // }).then(function(imageData) {
 
-        $ionicLoading.show({
-            template: "Chargement de l'image...",
-            delay: 750
-        });
+        // $ionicLoading.show({
+        //     template: "Chargement de l'image...",
+        //     delay: 750
+        // });
 
         $http({
             method: "POST",
@@ -226,7 +226,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 "Content-type": "application/json"
             },
             data: {
-                "imageB64": imageData
+                "imageB64": "kiko2" // imageData
             }
         }).success(function(idImg) {
 
@@ -241,9 +241,9 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
         });
 
-          }, function(err) {
+        //   }, function(err) {
 
-        });
+        // });
 
 
     }

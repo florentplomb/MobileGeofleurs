@@ -1,6 +1,6 @@
 <div class="popup">
     <div class="popup-head">
-        <h3 class="popup-title">Selectionner l'espèce observée !</h3>
+        <h3 class="popup-title">Selectionnez l'espèce observée </h3>
     </div>
     <div class="popup-body">
         <form name "espForm" >
@@ -12,19 +12,25 @@
                 <h3> Espèce séléctionée  </h3>
                 <div id="selectedEsp" class="item sel">
                     <div>
-                        <h6>Nom commmun: {{selectEsp.originalObject.NOMC}} </h6>
+                        <h4><img  src='img/flower2.png' alt='Flower'  width='16' height='25'/>
+                            <span ng-hide="selectEsp.originalObject.NOMC"> - </span> {{selectEsp.originalObject.NOMC}} </h4>
                     </div>
                     <div>
-                        <h6>Nom latin : {{selectEsp.originalObject.NOML}}</h6>
+                        <p style="font-style: italic;"> {{selectEsp.originalObject.NOML}}</p>
                     </div>
                     <div>
-                        <h6>Commune de la saisie : {{newCommune[0].properties.NAME}}  </h6>
+                        <h4><i style="color: blue;" class="icon  ion-ios-location"></i> {{newCommune[0].properties.NAME}}  </h4>
                     </div>
                 </div>
             </div>
-            <div ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
-                <p ng-hide="afficherImg"> Afficher ma photo </p>
-                <p ng-hide="!afficherImg"> Cacher ma photo </p>
+            <div style="margin-top: 12px" ng-click="afficherImg ? afficherImg = false : afficherImg = true ">
+                <button class="button button-small  button-stable" ng-hide="afficherImg">
+            Afficher photo
+                </button>
+
+                  <button class="button button-small  button-stable" ng-hide="!afficherImg">
+            Masquer photo
+                </button>
             </div>
             <img ng-hide="!afficherImg" src="{{UrlnewImg}}" width="100%" />
         </form>

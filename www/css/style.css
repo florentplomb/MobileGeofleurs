@@ -28,6 +28,12 @@ float: left;
 }
 .sel {
   background-color: #ffffff;
+
+
+}
+
+.sel h4 {
+  font-size: 1em;
 }
 
 

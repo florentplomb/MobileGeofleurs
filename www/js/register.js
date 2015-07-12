@@ -14,7 +14,7 @@ appRegister.controller('RegisterCtrl', function($scope, AuthService, $ionicHisto
 
         // Show a loading message if the request takes too long.
         $ionicLoading.show({
-            template: 'Regsiter in...',
+            template: 'Register in...',
             delay: 750
         });
 
