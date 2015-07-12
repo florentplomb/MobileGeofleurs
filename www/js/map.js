@@ -111,7 +111,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                 lng: random(minLng, maxLng),
                 lat: random(minLat, maxLat),
                 icon:flowers[randomInt(0, flowers.length)],
-                message: '<p ng-click="goDetail()"><img src="img/flower8.png" width="20px"/>Orchidée moucheron</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
+                message: '<p ng-click="goDetail()"><img src="img/flower8.png" width="20px"/>Coquelicot</p><img src="img/fleur8.jpg" style="padding-left: 12px; margin-top: -12px; margin-left: 12px" width="100px"/><a style="display:block; text-align:center" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a>',
                 group: 'yverdon',
                 draggable: true,
                  getMessageScope: function() {
