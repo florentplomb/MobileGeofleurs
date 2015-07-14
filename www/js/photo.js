@@ -29,29 +29,6 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
 
 
-    // $scope.resetflower = function() {
-
-    //     console.log("ResetFlower");
-
-    //     $scope.newCommune = [];
-
-    //     $scope.newFlower = {
-    //         type: "Feature",
-    //         properties: {
-
-    //             commune: {},
-    //             image: {},
-    //             espece: null,
-    //         },
-    //         geometry: {
-    //             type: "Point",
-    //             coordinates: []
-    //         }
-    //     };
-
-    // }
-
-
 
     $scope.noIDontknowEsp = function() {
         ngDialog.open({
@@ -200,21 +177,21 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
 
         })
 
-        // CameraService.getPicture({
-        //     quality: 100,
-        //     targetWidth: 800,
-        //     targetHeight: 1200,
-        //     saveToPhotoAlbum: false,
-        //     correctOrientation: true,
-        //     encodingType: navigator.camera.EncodingType.JPEG,
-        //     destinationType: navigator.camera.DestinationType.DATA_URL,
-        //     allowEdit:true,
-        // }).then(function(imageData) {
+        CameraService.getPicture({
+            quality: 75,
+            targetWidth: 800,
+            targetHeight: 1200,
+            saveToPhotoAlbum: false,
+            correctOrientation: true,
+            encodingType: navigator.camera.EncodingType.JPEG,
+            destinationType: navigator.camera.DestinationType.DATA_URL,
+            allowEdit:true,
+        }).then(function(imageData) {
 
-        // $ionicLoading.show({
-        //     template: "Chargement de l'image...",
-        //     delay: 750
-        // });
+        $ionicLoading.show({
+            template: "Chargement de l'image...",
+            delay: 750
+        });
 
         $http({
             method: "POST",
@@ -226,7 +203,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 "Content-type": "application/json"
             },
             data: {
-                "imageB64": "kiko2" // imageData
+                "imageB64": imageData
             }
         }).success(function(idImg) {
 
@@ -241,97 +218,13 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
             $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
         });
 
-        //   }, function(err) {
+          }, function(err) {
 
-        // });
+        });
 
 
     }
 
 
-
-    // $scope.getPhoto = function() {
-
-    //   var lng = $scope.position.lng
-    //         var lat = $scope.position.lat
-
-    //         $scope.newFlower.geometry.coordinates = [];
-    //         $scope.newFlower.geometry.coordinates.push(lng);
-    //         $scope.newFlower.geometry.coordinates.push(lat);
-    //          $rootScope.selEsp = null;
-
-
-    //     $http({
-    //         method: "POST",
-    //         url: apiUrl + "/communes/geoloc",
-    //         params: {
-    //             access_token: AuthService.currentUser.token
-    //         },
-    //         headers: {
-    //             "Content-type": "application/json"
-    //         },
-    //         data: {
-    //             "zone": $scope.newFlower
-    //         }
-    //     }).success(function(data) {
-    //         $scope.newCommune = data;
-
-
-    //     }).error(function(err) {
-    //     $scope.showAlert("commune introuvable");
-    //     $scope.newCommune[0]._id = null;
-    //         $ionicLoading.hide();
-
-    //     })
-
-    //     CameraService.getPicture({
-    //         quality: 75,
-    //         targetWidth: 400,
-    //         targetHeight: 600,
-    //         saveToPhotoAlbum: false,
-    //         correctOrientation: true,
-    //         encodingType: navigator.camera.EncodingType.JPEG,
-    //         destinationType: navigator.camera.DestinationType.DATA_URL
-    //     }).then(function(imageData) {
-
-
-
-    //         $ionicLoading.show({
-    //             template: "Chargement de l'image...",
-    //             delay: 750
-    //         });
-
-    //         $http({
-    //             method: "POST",
-    //             url: apiUrl + "/images",
-    //             params: {
-    //                 access_token: AuthService.currentUser.token
-    //             },
-    //             headers: {
-    //                 "Content-type": "application/json"
-    //             },
-    //             data: {
-    //                 "imageB64": imageData
-    //             }
-    //         }).success(function(idImg) {
-
-    //             $ionicLoading.hide();
-    //             $rootScope.UrlnewImg = apiUrl + "/images/" + idImg;
-    //             $scope.newImgId = idImg;
-    //             $scope.ifKnowName();
-
-    //         }).error(function(err) {
-    //             $scope.resetflower();
-    //             $ionicLoading.hide();
-    //             $scope.showAlert("Chargement de l'image interrompu. Veuillez réessayer");
-    //         });
-
-    //     }, function(err) {
-    //         $scope.resetflower();
-    //     });
-
-
-
-    // }
 
 })

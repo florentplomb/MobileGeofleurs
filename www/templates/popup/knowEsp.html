@@ -1,16 +1,14 @@
-<div  class="popup">
+<div class="popup">
     <div class="popup-head">
-    	<h3 class="popup-title">Connaissez-vous le nom de l'espèce observée ?</h3>
+        <h3 class="popup-title">Connaissez-vous le nom de l'espèce observée ?</h3>
     </div>
-    <div class="popup-body"><img width="60%" ng-src="{{UrlnewImg}}" alt="Votre photo"></div>
     <div class="popup-buttons">
         <button class="button  button-stable" ng-click="closeThisDialog(); noIDontknowEsp(); ">
             Non
         </button>
-          <button class="button  button-positive" ng-click="closeThisDialog(); yesIknowEsp();">
+        <button class="button  button-positive" ng-click="closeThisDialog(); yesIknowEsp();">
             Oui
         </button>
-
-
     </div>
+    <div class="popup-body"><img width="100%" ng-src="{{UrlnewImg}}" alt="Votre photo"></div>
 </div>

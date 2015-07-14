@@ -70,35 +70,6 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
     $scope.displayFlowers = function() {
 
-        //         function random(low, high) {
-        //     return Math.random() * (high - low) + low;
-        // }
-
-        // function randomInt(low, high) {
-        //     return Math.floor(Math.random() * (high - low) + low);
-        // }
-
-        // var minLat = 46.8256705653105;
-        // var maxLat = 46.8669985529976;
-        // var minLng = 6.59591674804687;
-        // var maxLng = 6.68003082275391;
-
-
-        // for (var i = 0; i < 80; i++) {
-
-        //     $scope.markers.push({
-        //         lng: random(minLng, maxLng),
-        //         lat: random(minLat, maxLat),
-        //         group: 'yverdon',
-        //         draggable: true,
-        //         message: '<div><p>Orchidaceae Neottia</p></div>'
-
-        //     });
-        // }
-
-
-
-
 
         $ionicLoading.show({
             template: "Chargement des publications",
@@ -155,12 +126,12 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
     $scope.maxbounds = {
         southWest: {
-            lat: 43.749859206774524,
-            lng: 5.559438705444336
+            lat: 42.749859206774524,
+            lng: 2.559438705444336
         },
         northEast: {
             lat: 48.8027621127906,
-            lng: 7.731100082397461
+            lng: 10.731100082397461
         }
 
     };
