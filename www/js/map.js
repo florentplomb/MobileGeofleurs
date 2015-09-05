@@ -105,7 +105,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
         var maxLng = 6.78003082275391;
 
 
-        for (var i = 0; i < 200; i++) {
+        for (var i = 0; i < 300; i++) {
 
             $scope.markers.push({
                 lng: random(minLng, maxLng),

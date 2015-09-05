@@ -4,6 +4,14 @@ html, body {
   width: 100%;
 }
 
+
+.marker-cluster-small {
+  background-color: rgba(1, 26, 140, 0.6);
+  }
+.marker-cluster-small div {
+  background-color: rgba(210, 4, 57, 0.6);
+  }
+
 .indent{
   padding-left: 0px;
 }
