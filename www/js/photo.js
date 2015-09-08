@@ -121,7 +121,7 @@ appPhoto.controller('PhotoCtrl', function($scope, ngDialog, $timeout, AuthServic
                 $ionicLoading.hide();
                 // $scope.resetflower();
                 $scope.displayFlowers();
-                $scope.showSuccess("Votre saisie est maintenant dispnobile sur la carte");
+                $scope.showSuccess("Votre saisie est maintenant disponible sur la carte");
             };
         }, $scope.newFlower)
 

@@ -12,6 +12,15 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     $scope.valideEsp = "";
 
 
+    $scope.$on('$ionicView.beforeEnter', function() {
+
+
+        $timeout(function() {
+            $scope.$broadcast('invalidateSize');
+
+        });
+    });
+
     var flowerIcon = {
 
         iconUrl: 'img/fIcon2.png',
@@ -72,12 +81,12 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
 
 
         $ionicLoading.show({
-            template: "Chargement des publications",
+            template: "Chargement des publications...",
             delay: 750
 
         });
 
-      $scope.markers = [];
+        $scope.markers = [];
 
         flowersService.getflowers(function(err, flowers) {
             if (err) {
@@ -99,7 +108,7 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
                         id: flower._id,
                         icon: flowerIcon,
                         group: 'yverdon',
-     message: '<div ng-click="goDetail(flower._id)"><img style="float: left;" src="img/flower8.png" width="20px"/> <p>{{flower.properties.espece.NOMC}} <p style="font-style:italic; line-height: 24px;" ng-hide="flower.properties.espece.NOMC"> Indéfinie </p>  </p><img align="center" src="{{urlImgID+flower.properties.image}}" style="margin-top: -12px;" width="90px"/><a style="display:block; text-align:center;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
+                        message: '<div ng-click="goDetail(flower._id)"><img style="float: left;" src="img/flower8.png" width="20px"/> <p>{{flower.properties.espece.NOMC}} <p style="font-style:italic; line-height: 24px;" ng-hide="flower.properties.espece.NOMC"> Indéfinie </p>  </p><img align="center" ng-src="{{urlImgID+flower.properties.image}}" style="margin-top: -12px;" width="90px"/><a style="display:block; text-align:center;" id="popuplf class="button icon-right ion-android-arrow-dropright">Details</a></div>',
 
                         getMessageScope: function() {
                             var scope = $scope.$new();
@@ -202,35 +211,34 @@ appMap.controller('MapCtrl', function($scope, $http, $ionicPlatform, ngDialog, H
     })
 
 
-      $scope.layers = {
-      baselayers: {
-        osm: {
-          name: 'OpenStreetMap',
-          url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          type: 'xyz'
-        },
-        mapbox_frontier: {
-          name: 'Frontières communales',
-          url: "http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}",
-          type: 'xyz',
-          layerOptions: {
-            apikey: 'pk.eyJ1IjoiYnVmYW51dm9scyIsImEiOiJLSURpX0pnIn0.2_9NrLz1U9bpwMQBhVk97Q',
-            mapid: 'fplomb.685fc191'
-          }
-        },
-        googleSatellite: {
-          name: 'Google Satellite',
-          layerType: 'SATELLITE',
-          type: 'google'
-        },
-        googleRoadmap: {
-          name: 'Google Streets',
-          layerType: 'ROADMAP',
-          type: 'google'
+    $scope.layers = {
+        baselayers: {
+            osm: {
+                name: 'OpenStreetMap',
+                url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                type: 'xyz'
+            },
+            mapbox_frontier: {
+                name: 'Frontières communales',
+                url: "http://api.tiles.mapbox.com/v4/{mapid}/{z}/{x}/{y}.png?access_token={apikey}",
+                type: 'xyz',
+                layerOptions: {
+                    apikey: 'pk.eyJ1IjoiYnVmYW51dm9scyIsImEiOiJLSURpX0pnIn0.2_9NrLz1U9bpwMQBhVk97Q',
+                    mapid: 'fplomb.685fc191'
+                }
+            },
+            googleSatellite: {
+                name: 'Google Satellite',
+                layerType: 'SATELLITE',
+                type: 'google'
+            },
+            googleRoadmap: {
+                name: 'Google Streets',
+                layerType: 'ROADMAP',
+                type: 'google'
+            }
         }
-       }
     }
-
 
 
 

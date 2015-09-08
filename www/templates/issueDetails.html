@@ -22,44 +22,12 @@
   </div>
 
   <div class="item center">
-    <img src="{{urlImg+flower.properties.image}}" width='80%'>
+    <img ng-src="{{urlImg}}" spinner-on-load width='80%' >
   </div>
 
 
 </div>
-    <!--         <div class="list card">
-                <div class="item">
-                    <h2>{{flower.properties.espece.NOMC}}sda</h2>
-                    <p class="state">{{}}</p>
-                </div>
-                <div class="item item-body">
 
-                    <img class="small-image" src="{{urlImg+flower.properties.image}}">
-                  <p class="titledescr">Description of the issue :</p>
-                  <p class="descr">{{}}</p>
-                  <p>
-                    <a href="" class="subdued">
-                    <i id="author" class="icon ion-person iconsize"></i>  {{issue.owner.name}}</a>
-                  </p>
-                  <p>
-                    <a href="" ng-class="{colorred: !custom}" class="subdued" ng-click="toggleCustom()">
-                      <i class="icon ion-chatbox"></i> {{}} comments</a>
-                    <a href="" class="subdued" ng-click="goToIssueMap()">
-                    <i class="icon ion-android-globe iconsize"></i> See on map</a>
-                  </p>
-                </div>
-            </div>
-            <div ng-hide="custom">
-                <div class="card item topcolor comment"> <textarea ng-model="commentAdd.text" placeholder="Write here"></textarea>
-                  <button class="send button button-block button-outline button-positive" ng-hide="!commentAdd.text"  ng-click='postComment()'>Send</button>
-                </div>
-            <div class="card item topcolor comment" ng-repeat="comment in issue.comments | orderBy: '-postedOn'"  class="item-thumbnail-left" >
-                 <p class="text">"{{}}"</p>
-                 <p class="descr">Written by : {{}}</p>
-
-                 <p class="date">{{}}</p>
-            </div>
-            </div> -->
         </ion-content>
 </ion-view>
 

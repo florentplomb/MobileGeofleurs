@@ -9,10 +9,7 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
 
     });
 
-  //   Platform.ready(function() {
-  //   // Hide the status bar
-  //   StatusBar.hide();
-  // });
+
 
     $scope.goRegister = function() {
 
@@ -80,17 +77,33 @@ appLogin.controller('LoginCtrl', function($scope, AuthService, $ionicHistory, $r
     }
 });
 
-appLogin.controller('LogoutCtrl', function($ionicHistory,AuthService, $rootScope, $scope, $state) {
+appLogin.controller('LogoutCtrl', function($ionicHistory,AuthService,$ionicPopup, $rootScope, $scope, $state) {
     $scope.logOut = function() {
+console.log("sadads");
 
-          $ionicHistory.nextViewOptions({
+   var confirmPopup = $ionicPopup.confirm({
+     title: 'Log Out',
+     template: "Voulez-vous vraiment changer d'utilisateur ? "
+   });
+   confirmPopup.then(function(res) {
+     if(res) {
+            $ionicHistory.nextViewOptions({
                 disableBack: true,
                  historyRoot: true
             });
+
+
         AuthService.unsetUser();
         $rootScope.currentUser = null;
         console.log('logout');
         $state.go('login');
+     } else {
+
+     }
+   });
+
+
+
     };
 
 
