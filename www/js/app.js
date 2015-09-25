@@ -67,9 +67,6 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
         $state.go('login');
       }
 
-
-
-
     });
   })
 
@@ -113,7 +110,6 @@ angular.module('starter', ['ionic', 'starter.factory', 'starter.services','start
     templateUrl: 'templates/issueDetails.html'
 
   })
-
 
 
     .state('map', {
